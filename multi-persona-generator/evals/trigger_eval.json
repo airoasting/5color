@@ -1,0 +1,22 @@
+[
+  {"query": "이메일 프로젝트 만들어줘", "should_trigger": true},
+  {"query": "내일 거래처에 보낼 이메일 톤 가이드 좀 잡아줘 — 우리 회사 시그니처 톤이 있어야 할 것 같아", "should_trigger": true},
+  {"query": "사과문 system instruction 필요해. 9.7 보정 적용된 걸로", "should_trigger": true},
+  {"query": "make a project guide for OKR quarterly reports", "should_trigger": true},
+  {"query": "create a system prompt for cover letter writing", "should_trigger": true},
+  {"query": "PPT 작업할 때 쓸 클로드 프로젝트 셋업해줘", "should_trigger": true},
+  {"query": "투자 메모 IC 미팅에서 쓸 거 — 가정 명시랑 베이스/업/다운 케이스 강제하는 지침", "should_trigger": true},
+  {"query": "이력서 이직용. 경력 10년차 IT 매니저", "should_trigger": true},
+  {"query": "multi-persona evaluation framework for press releases", "should_trigger": true},
+  {"query": "사내 공지 가이드 — 슬랙 메시지 형식으로 짧게", "should_trigger": true},
+  {"query": "이 이메일 톤만 평가해줘 — 너무 딱딱한 것 같은데", "should_trigger": false},
+  {"query": "이 보고서 한 줄로 요약해줘", "should_trigger": false},
+  {"query": "PPT 슬라이드가 몇 장이야?", "should_trigger": false},
+  {"query": "이 계약서에 NDA 조항 있어?", "should_trigger": false},
+  {"query": "이 자소서 점수 매겨줘 7/10 정도?", "should_trigger": false},
+  {"query": "summarize this memo in one line", "should_trigger": false},
+  {"query": "translate this email to English", "should_trigger": false},
+  {"query": "fix typos in this report", "should_trigger": false},
+  {"query": "오늘 점심 뭐 먹지?", "should_trigger": false},
+  {"query": "파이썬 함수 작성해줘 — 두 숫자 더하는", "should_trigger": false}
+]
