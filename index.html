@@ -14,8 +14,8 @@
 <meta property="og:title" content="하나의 프로젝트에, 다섯 명의 전문가 · Multi Persona Generator" />
 <meta property="og:description" content="AI가 스스로 쓴 글을 평가하면 점수는 늘 후합니다. 한 번 설정해두면 이메일·보고서·강의 자료까지, 모든 초안이 다섯 시선의 검토를 거쳐 나옵니다." />
 <meta property="og:url" content="https://airoasting.github.io/multi_persona/" />
-<meta property="og:image" content="https://airoasting.github.io/multi_persona/thumbnail.png" />
-<meta property="og:image:secure_url" content="https://airoasting.github.io/multi_persona/thumbnail.png" />
+<meta property="og:image" content="https://airoasting.github.io/multi_persona/assets/thumbnail.png" />
+<meta property="og:image:secure_url" content="https://airoasting.github.io/multi_persona/assets/thumbnail.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -25,10 +25,10 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="하나의 프로젝트에, 다섯 명의 전문가" />
 <meta name="twitter:description" content="한 번 붙여넣으면 모든 초안이 5인 페르소나 검토를 거치는 프로젝트 지침 자동 생성기." />
-<meta name="twitter:image" content="https://airoasting.github.io/multi_persona/thumbnail.png" />
+<meta name="twitter:image" content="https://airoasting.github.io/multi_persona/assets/thumbnail.png" />
 <meta name="twitter:image:alt" content="Multi Persona Generator 5인 페르소나 BLACK·RED·SILVER·BLUE·GOLD" />
 
-<link rel="icon" type="image/png" href="thumbnail.png" />
+<link rel="icon" type="image/png" href="assets/thumbnail.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -229,6 +229,16 @@ body.is-loading .list-view .card:nth-child(n+7){animation-delay:.84s}
   font-weight:400;
   letter-spacing:0;
 }
+.brand__mobile{
+  display:none;
+  color:var(--text-1);
+  font-family:var(--mono);
+  font-weight:600;
+  font-size:12px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
 .brand__name{
   color:var(--text-2);
   font-family:var(--mono);
@@ -357,6 +367,7 @@ body.is-loading .list-view .card:nth-child(n+7){animation-delay:.84s}
   padding-top:8px;
   border-top:1px solid var(--border);
 }
+.hero__sub--mobile{display:none}
 
 /* ============ SEARCH (editorial underline, prominent) ============ */
 .search-form{
@@ -1205,10 +1216,15 @@ body.is-loading .list-view .card:nth-child(n+7){animation-delay:.84s}
 @media (max-width:720px){
   .topbar__inner{padding:12px 18px}
   .brand__sep,.brand__name{display:none}
+  .brand__mobile{display:inline-block}
+  .hero__mark{display:none}
+  .hero__folio{flex-direction:column;align-items:flex-start;gap:6px}
   .hero{padding:48px 18px 24px;gap:24px}
   .hero__chapter{font-size:4rem}
   .hero__title{font-size:clamp(2rem,9vw,2.75rem)}
   .hero__sub{font-size:12px;padding-top:8px}
+  .hero__body > .hero__sub:not(.hero__sub--mobile){display:none}
+  .hero__sub--mobile{display:block}
   .steps{display:none}
   .search-form{padding:0 calc(2.5% + 17px);max-width:none;width:100%;margin:0;display:block}
   .search-bar input{padding:14px 0;font-size:14px}
@@ -1311,6 +1327,7 @@ body.is-loading .list-view .card:nth-child(n+7){animation-delay:.84s}
   <div class="topbar__inner">
     <a class="brand" href="#" id="brandHome" aria-label="홈으로">
       <img class="brand__mark" src="assets/logo1-transparent.png" alt="AI Roasting" />
+      <span class="brand__mobile">AI ROASTING</span>
       <span class="brand__sep">/</span>
       <span class="brand__name" id="brandLabel">Multi Persona Generator</span>
     </a>
@@ -1338,6 +1355,7 @@ body.is-loading .list-view .card:nth-child(n+7){animation-delay:.84s}
       <div class="hero__body">
         <h1 class="hero__title">하나의 프로젝트에<br/><em>다섯 명의 전문가.</em></h1>
         <p class="hero__sub">AI가 스스로 쓴 글을 평가하면 점수는 늘 후합니다. 한 번 설정해두면 이메일·보고서·강의 자료까지, 모든 초안이 다섯 시선의 검토를 거쳐 나옵니다.</p>
+        <p class="hero__sub hero__sub--mobile">목적을 고르면 프로젝트 지침이 완성됩니다. Claude나 ChatGPT에 붙여넣으면 답변이 달라집니다.</p>
       </div>
     </div>
     <div class="steps" aria-label="사용법 3단계">
