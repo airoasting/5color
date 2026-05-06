@@ -2968,6 +2968,24 @@ function openDetail(id, opts){
     try{ history.pushState({id}, "", "#"+id); }catch(_){}
   }
 
+  // Pull persona text directly from fullPrompt so left textarea ↔ right prompt stay in sync.
+  // Card-level red.watch / black / gold etc. are short summaries authored separately and
+  // do NOT appear verbatim in fullPrompt, so split/join replacement would silently fail.
+  const fp = d.fullPrompt || "";
+  const pickCritic = KEY=>{
+    const m = fp.match(new RegExp("^- "+KEY+" ([^:\\n]+?):\\s*([\\s\\S]*?)(?=\\n- (?:BLACK|RED|SILVER|BLUE|GOLD) |\\n\\n|$)", "m"));
+    return m ? {axis:m[1].trim(), watch:m[2].trim()} : null;
+  };
+  const pickRole = KEY=>{
+    const m = fp.match(new RegExp("^- "+KEY+" ([^:\\n]+?):\\s*([\\s\\S]*?)(?=\\n- (?:BLACK|RED|SILVER|BLUE|GOLD) |\\n\\n|$)", "m"));
+    return m ? {role:m[1].trim(), text:m[2].trim()} : null;
+  };
+  const blackP  = pickRole("BLACK")   || {role:"수행자", text:d.black};
+  const redP    = pickCritic("RED")   || {axis:d.red.axis, watch:d.red.watch};
+  const silverP = pickCritic("SILVER")|| {axis:d.silver.axis, watch:d.silver.watch};
+  const blueP   = pickCritic("BLUE")  || {axis:d.blue.axis, watch:d.blue.watch};
+  const goldP   = pickRole("GOLD")    || {role:"독자", text:d.gold};
+
   detailState = {
     domainId:id,
     cat:d.cat,
@@ -2976,18 +2994,18 @@ function openDetail(id, opts){
     subhead:d.subhead,
     fullPrompt:d.fullPrompt,
     original:{
-      black:d.black,
-      red:{axis:d.red.axis,watch:d.red.watch},
-      silver:{axis:d.silver.axis,watch:d.silver.watch},
-      blue:{axis:d.blue.axis,watch:d.blue.watch},
-      gold:d.gold
+      black:blackP.text,
+      red:{axis:redP.axis,watch:redP.watch},
+      silver:{axis:silverP.axis,watch:silverP.watch},
+      blue:{axis:blueP.axis,watch:blueP.watch},
+      gold:goldP.text
     },
     personas:{
-      black:{enabled:true,role:"수행자",text:d.black},
-      red:  {enabled:true,axis:d.red.axis,watch:d.red.watch},
-      silver:{enabled:true,axis:d.silver.axis,watch:d.silver.watch},
-      blue: {enabled:true,axis:d.blue.axis,watch:d.blue.watch},
-      gold: {enabled:true,role:"독자",text:d.gold}
+      black:{enabled:true,role:blackP.role,text:blackP.text},
+      red:  {enabled:true,axis:redP.axis,watch:redP.watch},
+      silver:{enabled:true,axis:silverP.axis,watch:silverP.watch},
+      blue: {enabled:true,axis:blueP.axis,watch:blueP.watch},
+      gold: {enabled:true,role:goldP.role,text:goldP.text}
     }
   };
 
