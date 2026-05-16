@@ -1120,7 +1120,7 @@ body.is-loading .grid-section{animation-delay:.28s}
     top:56px;left:0;right:0;
     z-index:55;
     background:var(--cream);
-    padding:14px 18px 10px;
+    padding:22px 18px 20px;
     border-bottom:1px solid var(--rule);
     animation:chipDrop .28s cubic-bezier(.16,.84,.32,1.06) both;
   }
@@ -1157,13 +1157,14 @@ body.is-loading .grid-section{animation-delay:.28s}
   }
   body.menu-open .chips-wrap{
     position:fixed;
-    top:128px;left:0;right:0;bottom:0;
+    top:146px;left:0;right:0;bottom:0;
     z-index:55;
     background:var(--cream);
     overflow-y:auto;
     padding:14px 0 32px;
     border-top:1px solid var(--rule);
   }
+  body.menu-open.searching .chips-wrap{display:none}
   .chips{
     display:none;
     flex-direction:column;
@@ -2527,6 +2528,7 @@ function buildChips(){
     if(chips.contains(e.target)) return;
     if(chipsToggle && chipsToggle.contains(e.target)) return;
     if(activeCat && activeCat.contains(e.target)) return;
+    if(e.target.closest(".search-form")) return;
     setChipsOpen(false);
   });
   chips.querySelectorAll(".chip").forEach(btn=>{
@@ -2886,8 +2888,13 @@ function goHome(){
     b.setAttribute("aria-selected", on ? "true" : "false");
   });
   chips.classList.remove("is-open");
+  document.body.classList.remove("menu-open");
   const chipsToggle = document.getElementById("chipsToggle");
-  if(chipsToggle) chipsToggle.setAttribute("aria-expanded","false");
+  if(chipsToggle){
+    chipsToggle.setAttribute("aria-expanded","false");
+    chipsToggle.classList.remove("is-open");
+    chipsToggle.setAttribute("aria-label","카테고리 메뉴");
+  }
   renderActiveCat();
   renderGrid();
   try{ history.pushState(null, "", location.pathname + location.search); }catch(_){}
@@ -2906,6 +2913,10 @@ searchInput.addEventListener("input",e=>{
     activeQuery = e.target.value.trim();
     renderGrid();
   },120);
+  document.body.classList.toggle("searching", e.target.value.trim().length > 0);
+});
+searchInput.addEventListener("focus",()=>{
+  if(searchInput.value.trim()) document.body.classList.add("searching");
 });
 
 /* ============ COPY ============ */
