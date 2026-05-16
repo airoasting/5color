@@ -1126,8 +1126,15 @@ body.is-loading .grid-section{animation-delay:.28s}
   .search-bar input{font-size:15px;padding:14px 20px}
   .search-bar__btn{padding:0 20px;font-size:11px}
 
-  /* hamburger → X transform */
-  .icon-btn--menu{display:inline-flex;position:relative;z-index:65}
+  /* hamburger → X transform, fixed top-right */
+  .icon-btn--menu{
+    display:inline-flex;
+    position:fixed;
+    top:14px;
+    right:18px;
+    z-index:70;
+    background:var(--cream);
+  }
   .icon-btn--menu .hamburger{
     width:18px;
     height:14px;
@@ -1155,8 +1162,13 @@ body.is-loading .grid-section{animation-delay:.28s}
     border-bottom:none;
   }
   body.menu-open .chips-wrap{
+    position:fixed;
+    top:70px;left:0;right:0;bottom:0;
+    z-index:55;
     background:var(--cream);
-    border-bottom:1px solid var(--rule);
+    overflow-y:auto;
+    padding:14px 0 32px;
+    border-top:1px solid var(--rule);
   }
   body.menu-open.searching .chips-wrap{display:none}
   .chips{
