@@ -1,0 +1,1304 @@
+{
+  "routes": [
+    {
+      "id": "p1",
+      "siblings": [
+        {
+          "sib_id": "p19",
+          "sib_title": "어려운 메시지 (거절·계약 종료)",
+          "condition": "거절·계약 종료 같은 곤란한 통보면"
+        },
+        {
+          "sib_id": "p9",
+          "sib_title": "CS 응답 템플릿",
+          "condition": "고객 불만 응대 답장이면"
+        },
+        {
+          "sib_id": "p2",
+          "sib_title": "사과문",
+          "condition": "잘못을 사과하는 메일이면"
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "siblings": [
+        {
+          "sib_id": "p3",
+          "sib_title": "위기 대응 메시지",
+          "condition": "기자·외부에 즉시 입장을 내야 하면"
+        },
+        {
+          "sib_id": "p9",
+          "sib_title": "CS 응답 템플릿",
+          "condition": "개별 고객 불만에 답하는 거면"
+        },
+        {
+          "sib_id": "p1",
+          "sib_title": "이메일 (외부 비즈니스)",
+          "condition": "가벼운 양해 요청 수준이면"
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "siblings": [
+        {
+          "sib_id": "p2",
+          "sib_title": "사과문",
+          "condition": "책임 인정과 재발 방지가 핵심이면"
+        },
+        {
+          "sib_id": "p4",
+          "sib_title": "보도자료",
+          "condition": "공식 발표를 기사화하려면"
+        },
+        {
+          "sib_id": "p16",
+          "sib_title": "사내 공지",
+          "condition": "대상이 내부 구성원이면"
+        }
+      ]
+    },
+    {
+      "id": "p4",
+      "siblings": [
+        {
+          "sib_id": "p3",
+          "sib_title": "위기 대응 메시지",
+          "condition": "사고·논란에 입장을 내는 거면"
+        },
+        {
+          "sib_id": "p7",
+          "sib_title": "출시 메시지",
+          "condition": "제품 출시를 사용자에게 알리는 거면"
+        },
+        {
+          "sib_id": "p31",
+          "sib_title": "IR·실적 발표",
+          "condition": "실적·투자자 대상 발표면"
+        }
+      ]
+    },
+    {
+      "id": "p5",
+      "siblings": [
+        {
+          "sib_id": "p11",
+          "sib_title": "링크드인 포스트",
+          "condition": "단발 단일 포스트면"
+        },
+        {
+          "sib_id": "p14",
+          "sib_title": "블로그",
+          "condition": "한 편의 긴 글이면"
+        },
+        {
+          "sib_id": "p1",
+          "sib_title": "이메일 (외부 비즈니스)",
+          "condition": "개별 수신자에게 보내는 메일이면"
+        }
+      ]
+    },
+    {
+      "id": "p6",
+      "siblings": [
+        {
+          "sib_id": "p26",
+          "sib_title": "영업 제안서·RFP",
+          "condition": "수주를 위한 제안이면"
+        },
+        {
+          "sib_id": "p43",
+          "sib_title": "영업 덱·피치덱",
+          "condition": "슬라이드 발표 형식이면"
+        },
+        {
+          "sib_id": "p14",
+          "sib_title": "블로그",
+          "condition": "콘텐츠 마케팅 글이면"
+        }
+      ]
+    },
+    {
+      "id": "p7",
+      "siblings": [
+        {
+          "sib_id": "p4",
+          "sib_title": "보도자료",
+          "condition": "언론 배포가 목적이면"
+        },
+        {
+          "sib_id": "p56",
+          "sib_title": "카피·이름",
+          "condition": "한 줄 카피·네이밍만 필요하면"
+        },
+        {
+          "sib_id": "p11",
+          "sib_title": "링크드인 포스트",
+          "condition": "개인 채널 홍보 글이면"
+        }
+      ]
+    },
+    {
+      "id": "p8",
+      "siblings": [
+        {
+          "sib_id": "p9",
+          "sib_title": "CS 응답 템플릿",
+          "condition": "개별 고객 응대 답변이면"
+        },
+        {
+          "sib_id": "p21",
+          "sib_title": "HR 정책 발표",
+          "condition": "내부 정책 안내면"
+        },
+        {
+          "sib_id": "p73",
+          "sib_title": "웹사이트 제작",
+          "condition": "전체 페이지 구성이 필요하면"
+        }
+      ]
+    },
+    {
+      "id": "p9",
+      "siblings": [
+        {
+          "sib_id": "p2",
+          "sib_title": "사과문",
+          "condition": "공식 사과 성격이면"
+        },
+        {
+          "sib_id": "p8",
+          "sib_title": "FAQ",
+          "condition": "반복 질문을 미리 정리하는 거면"
+        },
+        {
+          "sib_id": "p1",
+          "sib_title": "이메일 (외부 비즈니스)",
+          "condition": "일반 거래처 메일이면"
+        }
+      ]
+    },
+    {
+      "id": "p10",
+      "siblings": [
+        {
+          "sib_id": "p20",
+          "sib_title": "타운홀·전사 메시지",
+          "condition": "전사에 직접 말하는 메시지면"
+        },
+        {
+          "sib_id": "p56",
+          "sib_title": "카피·이름",
+          "condition": "한 줄 슬로건만 필요하면"
+        },
+        {
+          "sib_id": "p59",
+          "sib_title": "브랜드 가이드라인",
+          "condition": "브랜드 본질·보이스 정리면"
+        }
+      ]
+    },
+    {
+      "id": "p11",
+      "siblings": [
+        {
+          "sib_id": "p12",
+          "sib_title": "SNS 포스트 (페북·쓰레드·X)",
+          "condition": "페북·쓰레드·X 채널이면"
+        },
+        {
+          "sib_id": "p69",
+          "sib_title": "링크드인 프로필",
+          "condition": "포스트가 아니라 프로필이면"
+        },
+        {
+          "sib_id": "p14",
+          "sib_title": "블로그",
+          "condition": "긴 호흡의 글이면"
+        }
+      ]
+    },
+    {
+      "id": "p69",
+      "siblings": [
+        {
+          "sib_id": "p11",
+          "sib_title": "링크드인 포스트",
+          "condition": "피드에 올릴 글이면"
+        },
+        {
+          "sib_id": "p65",
+          "sib_title": "이력서",
+          "condition": "지원용 이력 문서면"
+        },
+        {
+          "sib_id": "p66",
+          "sib_title": "자기소개서",
+          "condition": "서술형 자기소개면"
+        }
+      ]
+    },
+    {
+      "id": "p12",
+      "siblings": [
+        {
+          "sib_id": "p11",
+          "sib_title": "링크드인 포스트",
+          "condition": "링크드인 채널이면"
+        },
+        {
+          "sib_id": "p5",
+          "sib_title": "뉴스레터",
+          "condition": "정기 발송 묶음이면"
+        },
+        {
+          "sib_id": "p56",
+          "sib_title": "카피·이름",
+          "condition": "한 줄 카피만 필요하면"
+        }
+      ]
+    },
+    {
+      "id": "p14",
+      "siblings": [
+        {
+          "sib_id": "p15",
+          "sib_title": "신문 칼럼",
+          "condition": "시사 논증 칼럼이면"
+        },
+        {
+          "sib_id": "p11",
+          "sib_title": "링크드인 포스트",
+          "condition": "짧은 단발 포스트면"
+        },
+        {
+          "sib_id": "p5",
+          "sib_title": "뉴스레터",
+          "condition": "정기 발송 묶음이면"
+        }
+      ]
+    },
+    {
+      "id": "p15",
+      "siblings": [
+        {
+          "sib_id": "p14",
+          "sib_title": "블로그",
+          "condition": "개인 채널 일반 글이면"
+        },
+        {
+          "sib_id": "p44",
+          "sib_title": "외부 강연",
+          "condition": "말로 전하는 발표면"
+        },
+        {
+          "sib_id": "p11",
+          "sib_title": "링크드인 포스트",
+          "condition": "짧은 의견 포스트면"
+        }
+      ]
+    },
+    {
+      "id": "p71",
+      "siblings": [
+        {
+          "sib_id": "p14",
+          "sib_title": "블로그",
+          "condition": "처음부터 글을 새로 쓰는 거면"
+        },
+        {
+          "sib_id": "p11",
+          "sib_title": "링크드인 포스트",
+          "condition": "포스트 형식으로 새로 쓰는 거면"
+        },
+        {
+          "sib_id": "p1",
+          "sib_title": "이메일 (외부 비즈니스)",
+          "condition": "메일 초안을 새로 잡는 거면"
+        }
+      ]
+    },
+    {
+      "id": "p16",
+      "siblings": [
+        {
+          "sib_id": "p21",
+          "sib_title": "HR 정책 발표",
+          "condition": "인사 정책 변경 안내면"
+        },
+        {
+          "sib_id": "p20",
+          "sib_title": "타운홀·전사 메시지",
+          "condition": "리더가 직접 말하는 메시지면"
+        },
+        {
+          "sib_id": "p3",
+          "sib_title": "위기 대응 메시지",
+          "condition": "사고·위기 상황 공지면"
+        }
+      ]
+    },
+    {
+      "id": "p18",
+      "siblings": [
+        {
+          "sib_id": "p21",
+          "sib_title": "HR 정책 발표",
+          "condition": "기존 직원 대상 인사 안내면"
+        },
+        {
+          "sib_id": "p69",
+          "sib_title": "링크드인 프로필",
+          "condition": "개인 프로필 작성이면"
+        },
+        {
+          "sib_id": "p16",
+          "sib_title": "사내 공지",
+          "condition": "내부 공지 성격이면"
+        }
+      ]
+    },
+    {
+      "id": "p19",
+      "siblings": [
+        {
+          "sib_id": "p2",
+          "sib_title": "사과문",
+          "condition": "잘못을 사과해야 하면"
+        },
+        {
+          "sib_id": "p1",
+          "sib_title": "이메일 (외부 비즈니스)",
+          "condition": "일반 거래처 메일이면"
+        },
+        {
+          "sib_id": "p75",
+          "sib_title": "성과 평가·피드백",
+          "condition": "팀원 평가 피드백이면"
+        }
+      ]
+    },
+    {
+      "id": "p20",
+      "siblings": [
+        {
+          "sib_id": "p16",
+          "sib_title": "사내 공지",
+          "condition": "문서로 알리는 공지면"
+        },
+        {
+          "sib_id": "p10",
+          "sib_title": "비전·미션 선언문",
+          "condition": "비전·미션 자체를 다듬는 거면"
+        },
+        {
+          "sib_id": "p21",
+          "sib_title": "HR 정책 발표",
+          "condition": "인사 정책 안내면"
+        }
+      ]
+    },
+    {
+      "id": "p21",
+      "siblings": [
+        {
+          "sib_id": "p16",
+          "sib_title": "사내 공지",
+          "condition": "일반 업무 공지면"
+        },
+        {
+          "sib_id": "p8",
+          "sib_title": "FAQ",
+          "condition": "예상 질문을 미리 정리하는 거면"
+        },
+        {
+          "sib_id": "p18",
+          "sib_title": "채용 공고",
+          "condition": "채용 공고 작성이면"
+        }
+      ]
+    },
+    {
+      "id": "p22",
+      "siblings": [
+        {
+          "sib_id": "p75",
+          "sib_title": "성과 평가·피드백",
+          "condition": "공식 평가·피드백이면"
+        },
+        {
+          "sib_id": "p27",
+          "sib_title": "회의록",
+          "condition": "회의 결과 기록이면"
+        },
+        {
+          "sib_id": "p68",
+          "sib_title": "리더 심리 상담",
+          "condition": "리더 개인 고민 상담이면"
+        }
+      ]
+    },
+    {
+      "id": "p23",
+      "siblings": [
+        {
+          "sib_id": "p72",
+          "sib_title": "보고서 (분석)",
+          "condition": "분석·통찰 중심 보고서면"
+        },
+        {
+          "sib_id": "p27",
+          "sib_title": "회의록",
+          "condition": "회의 결과 기록이면"
+        },
+        {
+          "sib_id": "p32",
+          "sib_title": "OKR·KPI 정기 리포트",
+          "condition": "정기 지표 리포트면"
+        }
+      ]
+    },
+    {
+      "id": "p25",
+      "siblings": [
+        {
+          "sib_id": "p26",
+          "sib_title": "영업 제안서·RFP",
+          "condition": "외부 고객 수주 제안이면"
+        },
+        {
+          "sib_id": "p30",
+          "sib_title": "PRD (제품요구사항문서) 작성",
+          "condition": "제품 요구사항 정의면"
+        },
+        {
+          "sib_id": "p23",
+          "sib_title": "보고서 (실무, 1페이지)",
+          "condition": "한 장 실무 보고면"
+        }
+      ]
+    },
+    {
+      "id": "p26",
+      "siblings": [
+        {
+          "sib_id": "p43",
+          "sib_title": "영업 덱·피치덱",
+          "condition": "슬라이드 발표 형식이면"
+        },
+        {
+          "sib_id": "p25",
+          "sib_title": "기획안·제안서",
+          "condition": "내부 결재용 기획이면"
+        },
+        {
+          "sib_id": "p6",
+          "sib_title": "사례 연구",
+          "condition": "성공 사례로 설득하는 거면"
+        }
+      ]
+    },
+    {
+      "id": "p27",
+      "siblings": [
+        {
+          "sib_id": "p38",
+          "sib_title": "전문가 콜 노트 (Expert Call)",
+          "condition": "전문가 인터뷰 기록이면"
+        },
+        {
+          "sib_id": "p22",
+          "sib_title": "정기 1on1",
+          "condition": "1on1 면담 준비면"
+        },
+        {
+          "sib_id": "p23",
+          "sib_title": "보고서 (실무, 1페이지)",
+          "condition": "결과를 보고로 정리하는 거면"
+        }
+      ]
+    },
+    {
+      "id": "p28",
+      "siblings": [
+        {
+          "sib_id": "p29",
+          "sib_title": "주주 서한",
+          "condition": "주주에게 보내는 서한이면"
+        },
+        {
+          "sib_id": "p31",
+          "sib_title": "IR·실적 발표",
+          "condition": "투자자 실적 발표면"
+        },
+        {
+          "sib_id": "p34",
+          "sib_title": "투자 메모 (IC Memo)",
+          "condition": "투자 심의 메모면"
+        }
+      ]
+    },
+    {
+      "id": "p29",
+      "siblings": [
+        {
+          "sib_id": "p35",
+          "sib_title": "LP 리포트 (펀드 업데이트)",
+          "condition": "펀드 LP 대상 업데이트면"
+        },
+        {
+          "sib_id": "p28",
+          "sib_title": "이사회 보고서",
+          "condition": "이사회 결정 요청이면"
+        },
+        {
+          "sib_id": "p31",
+          "sib_title": "IR·실적 발표",
+          "condition": "공개 실적 발표면"
+        }
+      ]
+    },
+    {
+      "id": "p30",
+      "siblings": [
+        {
+          "sib_id": "p25",
+          "sib_title": "기획안·제안서",
+          "condition": "사업 기획·제안이면"
+        },
+        {
+          "sib_id": "p72",
+          "sib_title": "보고서 (분석)",
+          "condition": "분석 보고면"
+        },
+        {
+          "sib_id": "p32",
+          "sib_title": "OKR·KPI 정기 리포트",
+          "condition": "목표·지표 추적이면"
+        }
+      ]
+    },
+    {
+      "id": "p31",
+      "siblings": [
+        {
+          "sib_id": "p33",
+          "sib_title": "분기 실적 리뷰",
+          "condition": "내부 분기 리뷰면"
+        },
+        {
+          "sib_id": "p29",
+          "sib_title": "주주 서한",
+          "condition": "서한 형식이면"
+        },
+        {
+          "sib_id": "p28",
+          "sib_title": "이사회 보고서",
+          "condition": "이사회 보고면"
+        }
+      ]
+    },
+    {
+      "id": "p32",
+      "siblings": [
+        {
+          "sib_id": "p33",
+          "sib_title": "분기 실적 리뷰",
+          "condition": "분기 성과 원인 분석이면"
+        },
+        {
+          "sib_id": "p23",
+          "sib_title": "보고서 (실무, 1페이지)",
+          "condition": "한 장 실무 보고면"
+        },
+        {
+          "sib_id": "p72",
+          "sib_title": "보고서 (분석)",
+          "condition": "심층 분석 보고면"
+        }
+      ]
+    },
+    {
+      "id": "p33",
+      "siblings": [
+        {
+          "sib_id": "p31",
+          "sib_title": "IR·실적 발표",
+          "condition": "외부 투자자 발표면"
+        },
+        {
+          "sib_id": "p32",
+          "sib_title": "OKR·KPI 정기 리포트",
+          "condition": "목표 진행률 리포트면"
+        },
+        {
+          "sib_id": "p40",
+          "sib_title": "경영 진단 보고서",
+          "condition": "경영 전반 진단이면"
+        }
+      ]
+    },
+    {
+      "id": "p34",
+      "siblings": [
+        {
+          "sib_id": "p35",
+          "sib_title": "LP 리포트 (펀드 업데이트)",
+          "condition": "LP 대상 펀드 업데이트면"
+        },
+        {
+          "sib_id": "p54",
+          "sib_title": "실사 보고서 (Due Diligence)",
+          "condition": "실사 발견사항 정리면"
+        },
+        {
+          "sib_id": "p28",
+          "sib_title": "이사회 보고서",
+          "condition": "이사회 결정 요청이면"
+        }
+      ]
+    },
+    {
+      "id": "p35",
+      "siblings": [
+        {
+          "sib_id": "p29",
+          "sib_title": "주주 서한",
+          "condition": "주주 서한 형식이면"
+        },
+        {
+          "sib_id": "p34",
+          "sib_title": "투자 메모 (IC Memo)",
+          "condition": "개별 투자 심의면"
+        },
+        {
+          "sib_id": "p31",
+          "sib_title": "IR·실적 발표",
+          "condition": "공개 실적 발표면"
+        }
+      ]
+    },
+    {
+      "id": "p37",
+      "siblings": [
+        {
+          "sib_id": "p40",
+          "sib_title": "경영 진단 보고서",
+          "condition": "특정 기업 경영 진단이면"
+        },
+        {
+          "sib_id": "p72",
+          "sib_title": "보고서 (분석)",
+          "condition": "일반 분석 보고면"
+        },
+        {
+          "sib_id": "p45",
+          "sib_title": "컨설팅 덱 (진단·권고)",
+          "condition": "슬라이드 권고 형식이면"
+        }
+      ]
+    },
+    {
+      "id": "p38",
+      "siblings": [
+        {
+          "sib_id": "p27",
+          "sib_title": "회의록",
+          "condition": "일반 회의 기록이면"
+        },
+        {
+          "sib_id": "p37",
+          "sib_title": "산업·시장 분석 리포트",
+          "condition": "산업 전체 분석이면"
+        },
+        {
+          "sib_id": "p54",
+          "sib_title": "실사 보고서 (Due Diligence)",
+          "condition": "실사 자료 정리면"
+        }
+      ]
+    },
+    {
+      "id": "p39",
+      "siblings": [
+        {
+          "sib_id": "p60",
+          "sib_title": "내러티브 메모 (6-pager)",
+          "condition": "산문 완결 메모로 풀어내면"
+        },
+        {
+          "sib_id": "p43",
+          "sib_title": "영업 덱·피치덱",
+          "condition": "덱 자체를 만드는 거면"
+        },
+        {
+          "sib_id": "p72",
+          "sib_title": "보고서 (분석)",
+          "condition": "분석 보고서로 정리하면"
+        }
+      ]
+    },
+    {
+      "id": "p40",
+      "siblings": [
+        {
+          "sib_id": "p45",
+          "sib_title": "컨설팅 덱 (진단·권고)",
+          "condition": "슬라이드 권고 형식이면"
+        },
+        {
+          "sib_id": "p37",
+          "sib_title": "산업·시장 분석 리포트",
+          "condition": "산업·시장 전반 분석이면"
+        },
+        {
+          "sib_id": "p72",
+          "sib_title": "보고서 (분석)",
+          "condition": "일반 분석 보고면"
+        }
+      ]
+    },
+    {
+      "id": "p60",
+      "siblings": [
+        {
+          "sib_id": "p39",
+          "sib_title": "스토리라인 잡기",
+          "condition": "결론 한 줄만 먼저 잡으면"
+        },
+        {
+          "sib_id": "p23",
+          "sib_title": "보고서 (실무, 1페이지)",
+          "condition": "한 장 요약 보고면"
+        },
+        {
+          "sib_id": "p72",
+          "sib_title": "보고서 (분석)",
+          "condition": "분석 중심 보고면"
+        }
+      ]
+    },
+    {
+      "id": "p42",
+      "siblings": [
+        {
+          "sib_id": "p44",
+          "sib_title": "외부 강연",
+          "condition": "덱 없이 말로 하는 강연이면"
+        },
+        {
+          "sib_id": "p46",
+          "sib_title": "워크샵 자료",
+          "condition": "참여형 워크샵 진행이면"
+        },
+        {
+          "sib_id": "p43",
+          "sib_title": "영업 덱·피치덱",
+          "condition": "영업·설득 목적 덱이면"
+        }
+      ]
+    },
+    {
+      "id": "p43",
+      "siblings": [
+        {
+          "sib_id": "p26",
+          "sib_title": "영업 제안서·RFP",
+          "condition": "문서형 제안서면"
+        },
+        {
+          "sib_id": "p45",
+          "sib_title": "컨설팅 덱 (진단·권고)",
+          "condition": "진단·권고 컨설팅 덱이면"
+        },
+        {
+          "sib_id": "p6",
+          "sib_title": "사례 연구",
+          "condition": "성공 사례 중심이면"
+        }
+      ]
+    },
+    {
+      "id": "p44",
+      "siblings": [
+        {
+          "sib_id": "p42",
+          "sib_title": "강의 자료 (덱+스크립트)",
+          "condition": "슬라이드+스크립트 강의면"
+        },
+        {
+          "sib_id": "p15",
+          "sib_title": "신문 칼럼",
+          "condition": "글로 쓰는 칼럼이면"
+        },
+        {
+          "sib_id": "p20",
+          "sib_title": "타운홀·전사 메시지",
+          "condition": "사내 대상 발표면"
+        }
+      ]
+    },
+    {
+      "id": "p45",
+      "siblings": [
+        {
+          "sib_id": "p40",
+          "sib_title": "경영 진단 보고서",
+          "condition": "문서형 진단 보고면"
+        },
+        {
+          "sib_id": "p43",
+          "sib_title": "영업 덱·피치덱",
+          "condition": "영업·수주 목적 덱이면"
+        },
+        {
+          "sib_id": "p37",
+          "sib_title": "산업·시장 분석 리포트",
+          "condition": "산업 분석 자료면"
+        }
+      ]
+    },
+    {
+      "id": "p46",
+      "siblings": [
+        {
+          "sib_id": "p42",
+          "sib_title": "강의 자료 (덱+스크립트)",
+          "condition": "전달형 강의면"
+        },
+        {
+          "sib_id": "p22",
+          "sib_title": "정기 1on1",
+          "condition": "1대1 면담 준비면"
+        },
+        {
+          "sib_id": "p20",
+          "sib_title": "타운홀·전사 메시지",
+          "condition": "전사 전달 메시지면"
+        }
+      ]
+    },
+    {
+      "id": "p47",
+      "siblings": [
+        {
+          "sib_id": "p33",
+          "sib_title": "분기 실적 리뷰",
+          "condition": "숫자를 보고로 해설하는 거면"
+        },
+        {
+          "sib_id": "p34",
+          "sib_title": "투자 메모 (IC Memo)",
+          "condition": "투자 의사결정 메모면"
+        },
+        {
+          "sib_id": "p72",
+          "sib_title": "보고서 (분석)",
+          "condition": "분석 결과를 글로 정리하면"
+        }
+      ]
+    },
+    {
+      "id": "p49",
+      "siblings": [
+        {
+          "sib_id": "p50",
+          "sib_title": "법률 검토 의견서",
+          "condition": "법적 쟁점에 의견을 내는 거면"
+        },
+        {
+          "sib_id": "p53",
+          "sib_title": "세무 의견서",
+          "condition": "세무 쟁점 검토면"
+        },
+        {
+          "sib_id": "p26",
+          "sib_title": "영업 제안서·RFP",
+          "condition": "계약 전 제안 단계면"
+        }
+      ]
+    },
+    {
+      "id": "p50",
+      "siblings": [
+        {
+          "sib_id": "p49",
+          "sib_title": "계약서 검토",
+          "condition": "계약 조항 검토면"
+        },
+        {
+          "sib_id": "p53",
+          "sib_title": "세무 의견서",
+          "condition": "세무 쟁점 의견이면"
+        },
+        {
+          "sib_id": "p51",
+          "sib_title": "소장·답변서",
+          "condition": "소송 서면이면"
+        }
+      ]
+    },
+    {
+      "id": "p51",
+      "siblings": [
+        {
+          "sib_id": "p61",
+          "sib_title": "준비서면",
+          "condition": "기일별 쟁점 보강 서면이면"
+        },
+        {
+          "sib_id": "p50",
+          "sib_title": "법률 검토 의견서",
+          "condition": "소송 전 법적 의견이면"
+        },
+        {
+          "sib_id": "p49",
+          "sib_title": "계약서 검토",
+          "condition": "계약 분쟁 검토면"
+        }
+      ]
+    },
+    {
+      "id": "p61",
+      "siblings": [
+        {
+          "sib_id": "p51",
+          "sib_title": "소장·답변서",
+          "condition": "최초 소장·답변서면"
+        },
+        {
+          "sib_id": "p50",
+          "sib_title": "법률 검토 의견서",
+          "condition": "법적 의견 정리면"
+        },
+        {
+          "sib_id": "p53",
+          "sib_title": "세무 의견서",
+          "condition": "세무 쟁점 서면이면"
+        }
+      ]
+    },
+    {
+      "id": "p52",
+      "siblings": [
+        {
+          "sib_id": "p55",
+          "sib_title": "내부통제 평가 보고서",
+          "condition": "내부통제 결함 평가면"
+        },
+        {
+          "sib_id": "p53",
+          "sib_title": "세무 의견서",
+          "condition": "세무 쟁점 의견이면"
+        },
+        {
+          "sib_id": "p54",
+          "sib_title": "실사 보고서 (Due Diligence)",
+          "condition": "인수 실사 점검이면"
+        }
+      ]
+    },
+    {
+      "id": "p53",
+      "siblings": [
+        {
+          "sib_id": "p50",
+          "sib_title": "법률 검토 의견서",
+          "condition": "일반 법률 쟁점이면"
+        },
+        {
+          "sib_id": "p52",
+          "sib_title": "감사 의견서",
+          "condition": "회계 감사 의견이면"
+        },
+        {
+          "sib_id": "p49",
+          "sib_title": "계약서 검토",
+          "condition": "계약 조항 검토면"
+        }
+      ]
+    },
+    {
+      "id": "p54",
+      "siblings": [
+        {
+          "sib_id": "p34",
+          "sib_title": "투자 메모 (IC Memo)",
+          "condition": "투자 결정 메모로 정리하면"
+        },
+        {
+          "sib_id": "p52",
+          "sib_title": "감사 의견서",
+          "condition": "회계 감사 의견이면"
+        },
+        {
+          "sib_id": "p55",
+          "sib_title": "내부통제 평가 보고서",
+          "condition": "내부통제 점검이면"
+        }
+      ]
+    },
+    {
+      "id": "p55",
+      "siblings": [
+        {
+          "sib_id": "p52",
+          "sib_title": "감사 의견서",
+          "condition": "회계 감사 의견이면"
+        },
+        {
+          "sib_id": "p54",
+          "sib_title": "실사 보고서 (Due Diligence)",
+          "condition": "인수 실사 점검이면"
+        },
+        {
+          "sib_id": "p40",
+          "sib_title": "경영 진단 보고서",
+          "condition": "경영 전반 진단이면"
+        }
+      ]
+    },
+    {
+      "id": "p56",
+      "siblings": [
+        {
+          "sib_id": "p59",
+          "sib_title": "브랜드 가이드라인",
+          "condition": "브랜드 체계 전체를 잡으면"
+        },
+        {
+          "sib_id": "p7",
+          "sib_title": "출시 메시지",
+          "condition": "출시 메시지 한 묶음이면"
+        },
+        {
+          "sib_id": "p74",
+          "sib_title": "이미지 제작",
+          "condition": "시각 이미지가 필요하면"
+        }
+      ]
+    },
+    {
+      "id": "p59",
+      "siblings": [
+        {
+          "sib_id": "p56",
+          "sib_title": "카피·이름",
+          "condition": "카피·네이밍 한 점만 필요하면"
+        },
+        {
+          "sib_id": "p10",
+          "sib_title": "비전·미션 선언문",
+          "condition": "비전·미션 문구만 다듬으면"
+        },
+        {
+          "sib_id": "p73",
+          "sib_title": "웹사이트 제작",
+          "condition": "실제 페이지 구현이면"
+        }
+      ]
+    },
+    {
+      "id": "p63",
+      "siblings": [
+        {
+          "sib_id": "p64",
+          "sib_title": "시 쓰기",
+          "condition": "운문·시 형식이면"
+        },
+        {
+          "sib_id": "p14",
+          "sib_title": "블로그",
+          "condition": "실용 산문 글이면"
+        },
+        {
+          "sib_id": "p15",
+          "sib_title": "신문 칼럼",
+          "condition": "논증형 칼럼이면"
+        }
+      ]
+    },
+    {
+      "id": "p64",
+      "siblings": [
+        {
+          "sib_id": "p63",
+          "sib_title": "소설 쓰기",
+          "condition": "서사 산문이면"
+        },
+        {
+          "sib_id": "p56",
+          "sib_title": "카피·이름",
+          "condition": "한 줄 카피면"
+        },
+        {
+          "sib_id": "p14",
+          "sib_title": "블로그",
+          "condition": "일반 산문 글이면"
+        }
+      ]
+    },
+    {
+      "id": "p65",
+      "siblings": [
+        {
+          "sib_id": "p66",
+          "sib_title": "자기소개서",
+          "condition": "서술형 자기소개면"
+        },
+        {
+          "sib_id": "p69",
+          "sib_title": "링크드인 프로필",
+          "condition": "링크드인 프로필이면"
+        },
+        {
+          "sib_id": "p67",
+          "sib_title": "인터뷰 답변 준비",
+          "condition": "면접 답변 준비면"
+        }
+      ]
+    },
+    {
+      "id": "p66",
+      "siblings": [
+        {
+          "sib_id": "p65",
+          "sib_title": "이력서",
+          "condition": "이력 항목 정리면"
+        },
+        {
+          "sib_id": "p67",
+          "sib_title": "인터뷰 답변 준비",
+          "condition": "말로 답하는 면접이면"
+        },
+        {
+          "sib_id": "p69",
+          "sib_title": "링크드인 프로필",
+          "condition": "프로필 소개면"
+        }
+      ]
+    },
+    {
+      "id": "p67",
+      "siblings": [
+        {
+          "sib_id": "p66",
+          "sib_title": "자기소개서",
+          "condition": "글로 쓰는 자소서면"
+        },
+        {
+          "sib_id": "p65",
+          "sib_title": "이력서",
+          "condition": "이력 정리면"
+        },
+        {
+          "sib_id": "p44",
+          "sib_title": "외부 강연",
+          "condition": "공개 발표 준비면"
+        }
+      ]
+    },
+    {
+      "id": "p68",
+      "siblings": [
+        {
+          "sib_id": "p22",
+          "sib_title": "정기 1on1",
+          "condition": "팀원과의 면담 준비면"
+        },
+        {
+          "sib_id": "p67",
+          "sib_title": "인터뷰 답변 준비",
+          "condition": "면접 답변 준비면"
+        },
+        {
+          "sib_id": "p75",
+          "sib_title": "성과 평가·피드백",
+          "condition": "평가·피드백 작성이면"
+        }
+      ]
+    },
+    {
+      "id": "p72",
+      "siblings": [
+        {
+          "sib_id": "p23",
+          "sib_title": "보고서 (실무, 1페이지)",
+          "condition": "한 장 실무 보고면"
+        },
+        {
+          "sib_id": "p40",
+          "sib_title": "경영 진단 보고서",
+          "condition": "경영 진단·권고면"
+        },
+        {
+          "sib_id": "p37",
+          "sib_title": "산업·시장 분석 리포트",
+          "condition": "산업·시장 분석이면"
+        }
+      ]
+    },
+    {
+      "id": "p73",
+      "siblings": [
+        {
+          "sib_id": "p74",
+          "sib_title": "이미지 제작",
+          "condition": "이미지 한 장만 필요하면"
+        },
+        {
+          "sib_id": "p59",
+          "sib_title": "브랜드 가이드라인",
+          "condition": "브랜드 체계 정리면"
+        },
+        {
+          "sib_id": "p56",
+          "sib_title": "카피·이름",
+          "condition": "히어로 카피만 필요하면"
+        }
+      ]
+    },
+    {
+      "id": "p74",
+      "siblings": [
+        {
+          "sib_id": "p73",
+          "sib_title": "웹사이트 제작",
+          "condition": "페이지 전체 제작이면"
+        },
+        {
+          "sib_id": "p56",
+          "sib_title": "카피·이름",
+          "condition": "문구 카피면"
+        },
+        {
+          "sib_id": "p59",
+          "sib_title": "브랜드 가이드라인",
+          "condition": "비주얼 체계 정리면"
+        }
+      ]
+    },
+    {
+      "id": "p75",
+      "siblings": [
+        {
+          "sib_id": "p22",
+          "sib_title": "정기 1on1",
+          "condition": "1on1 면담 진행이면"
+        },
+        {
+          "sib_id": "p19",
+          "sib_title": "어려운 메시지 (거절·계약 종료)",
+          "condition": "해고·계약 종료 통보면"
+        },
+        {
+          "sib_id": "p68",
+          "sib_title": "리더 심리 상담",
+          "condition": "평가자 본인의 고민 상담이면"
+        }
+      ]
+    }
+  ]
+}
