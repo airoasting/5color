@@ -2,193 +2,91 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Thumbnail · Multi Persona Generator</title>
+<title>Thumbnail · 5-Color Harness</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  @font-face{
+    font-family:'Pretendard Variable';
+    font-weight:45 920;font-style:normal;font-display:swap;
+    src:url('fonts/PretendardVariable.ttf') format('truetype-variations');
+  }
   *{margin:0;padding:0;box-sizing:border-box}
   :root{
-    --bg:#F5EFE6;
-    --card:#FBF6EC;
-    --border:#D9CDB6;
-    --border-strong:#B4A78D;
-    --text:#1A1612;
-    --text-2:#3B322A;
-    --text-3:#7A6E60;
-    --accent:#CC785C;
-    --accent-deep:#A85B43;
-    --p-black:#1A1612;
-    --p-red:#CC785C;
-    --p-silver:#7A6E60;
-    --p-blue:#4A5E7E;
-    --p-gold:#C89A4C;
-    --sans:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Inter',sans-serif;
-    --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+    --burgundy:#7A1F35;
+    --pink:#F2B6C6;
+    --display:'Bricolage Grotesque','Pretendard Variable',system-ui,sans-serif;
+    --sans:'Pretendard Variable','Bricolage Grotesque',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
   }
-  html,body{margin:0;padding:0;background:#F5EFE6;width:1200px;height:630px;overflow:hidden}
-  body{font-family:var(--sans);color:var(--text);display:block}
-
+  html,body{width:1200px;height:630px;overflow:hidden;background:#7A1F35}
   .stage{
-    width:1200px;
-    height:630px;
-    min-height:630px;
-    max-height:630px;
-    position:absolute;
-    top:0;left:0;
-    overflow:hidden;
-    background:
-      radial-gradient(ellipse 1100px 700px at 88% 12%, rgba(204,120,92,.30) 0%, transparent 60%),
-      radial-gradient(ellipse 900px 600px at 8% 92%, rgba(168,91,67,.24) 0%, transparent 55%),
-      radial-gradient(ellipse 700px 500px at 50% 50%, rgba(255,255,255,.30) 0%, transparent 65%),
-      linear-gradient(135deg, #EFE5D2 0%, #F5EFE6 45%, #E9DCC4 100%);
-    display:flex;
-    flex-direction:column;
+    position:relative;width:1200px;height:630px;overflow:hidden;
+    background:#7A1F35;font-family:var(--sans);color:#fff;
   }
-  .stage::after{
-    content:'';
-    position:absolute;inset:0;
-    background:
-      radial-gradient(circle at 20% 20%, rgba(255,255,255,.22) 0%, transparent 40%),
-      radial-gradient(circle at 80% 80%, rgba(60,40,20,.06) 0%, transparent 50%);
-    pointer-events:none;
-  }
-  .stage > *{position:relative;z-index:1}
 
-  /* TOP BAR */
-  .topbar{
-    flex:0 0 80px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 60px;
-    border-bottom:1px solid rgba(180,167,141,.45);
+  /* CAST — full-bleed, faces kept, legs cropped */
+  .cast{position:absolute;inset:0;width:1200px;height:630px;object-fit:cover;object-position:50% 16%}
+  .scrim-top{
+    content:'';position:absolute;left:0;right:0;top:0;height:200px;z-index:2;pointer-events:none;
+    background:linear-gradient(180deg, rgba(122,31,53,0.82) 0%, rgba(122,31,53,0.30) 55%, rgba(122,31,53,0) 100%);
   }
-  .brand{display:flex;align-items:baseline;gap:14px}
-  .brand__mark{font-weight:800;font-size:18px;letter-spacing:-.01em;color:var(--accent)}
-  .brand__sub{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--text-2)}
-  .meta{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--text-3)}
+  .scrim-bot{
+    content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(0deg,
+      #7A1F35 0%,
+      rgba(122,31,53,0.97) 24%,
+      rgba(122,31,53,0.78) 40%,
+      rgba(122,31,53,0.20) 56%,
+      rgba(122,31,53,0) 68%);
+  }
 
-  /* MAIN */
-  .main{
-    flex:1 1 auto;
-    padding:0 60px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    gap:22px;
-    min-height:0;
-  }
-  .eyebrow{
-    font-family:var(--mono);
-    font-size:12px;
-    font-weight:500;
-    letter-spacing:.28em;
-    text-transform:uppercase;
-    color:var(--accent-deep);
-    display:flex;
-    align-items:center;
-    gap:14px;
-  }
-  .eyebrow::before{content:'';height:1px;background:var(--border-strong);flex:0 0 28px}
-  .eyebrow::after{content:'';height:1px;background:var(--border-strong);flex:1 1 auto}
+  /* CONTENT */
+  .content{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:space-between;padding:54px 66px 56px}
+  .top{display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:18px}
+  .dots{display:flex;gap:10px}
+  .dot{width:15px;height:15px;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+  .dot.black{background:#111111}
+  .dot.red{background:#D63A2F}
+  .dot.silver{background:#B5B3B0}
+  .dot.blue{background:#3866D6}
+  .dot.gold{background:#D7A839}
+  .wordmark{font-family:var(--display);font-weight:800;font-size:25px;letter-spacing:-0.005em;color:#fff}
+  .meta{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:0.24em;text-transform:uppercase;color:#fff;background:rgba(122,31,53,0.55);border:1px solid rgba(255,255,255,0.28);padding:8px 16px;border-radius:999px;backdrop-filter:blur(2px)}
 
-  .title{
-    font-weight:800;
-    font-size:74px;
-    line-height:1.05;
-    letter-spacing:-.035em;
-    color:var(--text);
-    word-break:keep-all;
-  }
-  .title em{font-style:normal;font-weight:800;color:var(--accent)}
-
-  /* PERSONA STRIP */
-  .personas{
-    flex:0 0 130px;
-    display:flex;
-    border-top:1px solid rgba(180,167,141,.5);
-    background:linear-gradient(180deg, rgba(239,229,210,.85) 0%, rgba(233,220,196,.85) 100%);
-  }
-  .persona{
-    flex:1 1 0;
-    padding:24px 24px 26px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    border-right:1px solid rgba(180,167,141,.4);
-    min-width:0;
-  }
-  .persona:last-child{border-right:none}
-  .persona__head{display:flex;align-items:center;gap:10px}
-  .persona__dot{
-    width:12px;height:12px;border-radius:50%;flex:0 0 12px;
-    box-shadow:0 1px 2px rgba(0,0,0,.15);
-  }
-  .persona[data-key="black"]  .persona__dot{background:var(--p-black)}
-  .persona[data-key="red"]    .persona__dot{background:var(--p-red)}
-  .persona[data-key="silver"] .persona__dot{background:var(--p-silver)}
-  .persona[data-key="blue"]   .persona__dot{background:var(--p-blue)}
-  .persona[data-key="gold"]   .persona__dot{background:var(--p-gold)}
-  .persona__name{
-    font-family:var(--mono);font-size:13px;font-weight:500;
-    letter-spacing:.18em;color:var(--text);
-  }
-  .persona__role{
-    font-size:15px;font-weight:600;color:var(--text-2);
-    line-height:1.3;word-break:keep-all;
-  }
-  .persona__tag{
-    font-family:var(--mono);font-size:10px;letter-spacing:.18em;
-    text-transform:uppercase;color:var(--text-3);
-    margin-top:auto;
-  }
+  .mid{max-width:780px}
+  .eyebrow{font-family:var(--mono);font-size:15px;font-weight:500;letter-spacing:0.2em;color:var(--pink);margin-bottom:20px}
+  .title{font-family:var(--sans);font-weight:800;font-size:74px;line-height:1.06;letter-spacing:-0.04em;color:#fff;word-break:keep-all}
+  .title em{font-style:normal;color:var(--pink)}
+  .sub{margin-top:26px;font-size:23px;font-weight:500;line-height:1.4;color:rgba(255,255,255,0.9);letter-spacing:-0.01em;word-break:keep-all}
+  .sub em{font-style:normal;font-weight:700;color:var(--pink)}
 </style>
 </head>
 <body>
   <div class="stage">
+    <img class="cast" src="images/5color_d.png" alt="">
+    <div class="scrim-top"></div>
+    <div class="scrim-bot"></div>
 
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand__mark">AI ROASTING</span>
-        <span class="brand__sub">Multi Persona Generator</span>
-      </div>
-      <span class="meta">프로젝트 지침 자동 생성기</span>
-    </header>
+    <div class="content">
+      <header class="top">
+        <div class="brand">
+          <span class="dots" aria-hidden="true">
+            <span class="dot black"></span><span class="dot red"></span><span class="dot silver"></span><span class="dot blue"></span><span class="dot gold"></span>
+          </span>
+          <span class="wordmark">5-COLOR HARNESS</span>
+        </div>
+        <span class="meta">AI ROASTING</span>
+      </header>
 
-    <section class="main">
-      <div class="eyebrow">한 번 붙여넣고 끝나는 5인 검토 시스템</div>
-      <h1 class="title">하나의 프로젝트에<br><em>다섯 명의 전문가.</em></h1>
-    </section>
-
-    <footer class="personas">
-      <div class="persona" data-key="black">
-        <div class="persona__head"><span class="persona__dot"></span><span class="persona__name">BLACK</span></div>
-        <span class="persona__role">실행자</span>
-        <span class="persona__tag">Drafter</span>
-      </div>
-      <div class="persona" data-key="red">
-        <div class="persona__head"><span class="persona__dot"></span><span class="persona__name">RED</span></div>
-        <span class="persona__role">의도·메시지</span>
-        <span class="persona__tag">Critic</span>
-      </div>
-      <div class="persona" data-key="silver">
-        <div class="persona__head"><span class="persona__dot"></span><span class="persona__name">SILVER</span></div>
-        <span class="persona__role">구조·완성도</span>
-        <span class="persona__tag">Critic</span>
-      </div>
-      <div class="persona" data-key="blue">
-        <div class="persona__head"><span class="persona__dot"></span><span class="persona__name">BLUE</span></div>
-        <span class="persona__role">톤·분량</span>
-        <span class="persona__tag">Critic</span>
-      </div>
-      <div class="persona" data-key="gold">
-        <div class="persona__head"><span class="persona__dot"></span><span class="persona__name">GOLD</span></div>
-        <span class="persona__role">실제 독자</span>
-        <span class="persona__tag">Reader</span>
-      </div>
-    </footer>
-
+      <section class="mid">
+        <div class="eyebrow">프로젝트 지침 프롬프트 · 2026</div>
+        <h1 class="title">하나의 프로젝트에,<br><em>다섯 명의 전문가.</em></h1>
+        <p class="sub"><em>다섯 시선</em>으로 평가하면, 산출물의 격이 달라집니다.</p>
+      </section>
+    </div>
   </div>
 </body>
 </html>
