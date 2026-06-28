@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="theme-color" content="#F2D86A" />
-<title>AI ROASTING · Color Harness</title>
+<title>5Color | AI ROASTING</title>
 <meta name="description" content="하나의 프로젝트에 다섯 명의 전문가. 한 번 붙여넣으면 모든 초안이 5인 페르소나 검토를 거치는 프로젝트 지침 자동 생성기." />
 
 <!-- Open Graph -->
@@ -1183,9 +1183,10 @@ em,.serif{
 .foot__big{
   font-family:var(--display);
   font-weight:800;
-  font-size:clamp(72px, 12vw, 180px);
-  letter-spacing:-0.05em;
-  line-height:0.9;
+  font-size:clamp(26px, 4.4vw, 52px);
+  letter-spacing:-0.01em;
+  line-height:1;
+  white-space:nowrap;
   color:var(--pink);
 }
 .foot__big em{font-family:var(--serif);font-style:normal;color:var(--cream)}
@@ -1196,11 +1197,26 @@ em,.serif{
   text-transform:uppercase;
   opacity:0.8;
 }
-.foot__end{
+.foot__bar{
+  grid-column:1/-1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px 28px;
+  flex-wrap:wrap;
+}
+.foot__by{
   display:flex;
   align-items:center;
   gap:18px;
-  flex-wrap:wrap;
+}
+.foot__name{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  opacity:0.85;
+  white-space:nowrap;
 }
 .foot__social{
   display:inline-flex;
@@ -1423,7 +1439,7 @@ body.is-loading .grid-section{animation-delay:.28s}
   .foot{padding:40px 0 48px;margin-top:48px}
   .foot__inner{grid-template-columns:1fr;gap:22px;padding:0 18px}
   .foot__sig{flex-direction:column;align-items:flex-start;gap:12px}
-  .foot__big{font-size:clamp(44px,14vw,72px);line-height:1;letter-spacing:-0.04em}
+  .foot__big{font-size:clamp(22px,6.5vw,34px);line-height:1;letter-spacing:-0.01em}
 }
 </style>
 </head>
@@ -1585,8 +1601,11 @@ body.is-loading .grid-section{animation-delay:.28s}
   <div class="foot__inner">
     <div class="foot__sig">
       <span class="foot__big">5 COLOR HARNESS</span>
-      <div class="foot__end">
-        <span class="foot__pages">&copy; 2026 AI ROASTING. All rights reserved.</span>
+    </div>
+    <div class="foot__bar">
+      <span class="foot__pages">&copy; 2026 AI ROASTING. All rights reserved.</span>
+      <div class="foot__by">
+        <span class="foot__name">강정구 &middot; JAYDEN KANG</span>
         <span class="foot__social">
           <a href="https://www.linkedin.com/in/jayden-kang/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
@@ -2452,7 +2471,8 @@ window.addEventListener("load",()=>{
   for(let i=0;i<FRAME_COUNT;i++){
     const im = new Image();
     im.decoding = "async";
-    im.src = "assets/images/5color-seq/f_" + String(i+1).padStart(3,"0") + ".jpg";
+    const ext = (i === 0 || i+1 === FRAME_COUNT) ? ".png" : ".jpg";  // 첫·마지막 장면은 고화질 PNG
+    im.src = "assets/images/5color-seq/f_" + String(i+1).padStart(3,"0") + ext;
     if(i===0){ im.onload = function(){ draw(0); }; }
     frames[i] = im;
   }
