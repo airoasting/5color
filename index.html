@@ -28,7 +28,8 @@
 <meta name="twitter:image" content="https://airoasting.github.io/multi_persona/assets/thumbnail.png" />
 <meta name="twitter:image:alt" content="5-Color Harness 5인 페르소나 BLACK·RED·SILVER·BLUE·GOLD" />
 
-<link rel="icon" type="image/png" href="assets/thumbnail.png" />
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -1195,6 +1196,25 @@ em,.serif{
   text-transform:uppercase;
   opacity:0.8;
 }
+.foot__end{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.foot__social{
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+}
+.foot__social a{
+  display:inline-flex;
+  color:var(--cream);
+  opacity:0.8;
+  transition:opacity .15s ease, transform .15s ease;
+}
+.foot__social a:hover{ opacity:1; transform:translateY(-1px); }
+.foot__social svg{ width:20px; height:20px; fill:currentColor; display:block; }
 
 /* ===== Toast ===== */
 .toast{
@@ -1451,7 +1471,7 @@ body.is-loading .grid-section{animation-delay:.28s}
      <div class="cast-sticky">
     <section class="cast" aria-label="5-Color Harness 다섯 전문가">
       <div class="cast__band">
-        <video class="cast__img" src="assets/images/5color-movie-scrub.mp4" width="1280" height="720" muted playsinline preload="auto" aria-label="5-Color Harness의 다섯 전문가. 왼쪽부터 BLACK 업무 수행 팀장, RED 이성적 비평가, SILVER 분야 전문가, BLUE 공감해주는 이, GOLD 고객 · 독자."></video>
+        <canvas class="cast__img" width="1038" height="584" aria-label="5-Color Harness의 다섯 전문가. 왼쪽부터 BLACK 업무 수행 팀장, RED 이성적 비평가, SILVER 분야 전문가, BLUE 공감해주는 이, GOLD 고객 · 독자."></canvas>
       </div>
       <div class="cast__roles" aria-hidden="true">
         <span class="cast__role" style="left:17%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip black"></span>Black</span><span class="cast__role-desc">업무 수행 팀장</span></span>
@@ -1564,8 +1584,18 @@ body.is-loading .grid-section{animation-delay:.28s}
 <footer class="foot">
   <div class="foot__inner">
     <div class="foot__sig">
-      <span class="foot__big">5 Color <em>&amp;</em> Harness</span>
-      <span class="foot__pages">&copy; 2026 AI ROASTING. All rights reserved.</span>
+      <span class="foot__big">5 COLOR HARNESS</span>
+      <div class="foot__end">
+        <span class="foot__pages">&copy; 2026 AI ROASTING. All rights reserved.</span>
+        <span class="foot__social">
+          <a href="https://www.linkedin.com/in/jayden-kang/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/jayden.kang" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.02 4.39 11.01 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.08 24 18.1 24 12.07z"/></svg>
+          </a>
+        </span>
+      </div>
     </div>
   </div>
 </footer>
@@ -2405,58 +2435,65 @@ window.addEventListener("load",()=>{
   window.addEventListener("scroll", toggle, {passive:true});
 })();
 
-/* CAST 시퀀스: (1)스크롤하면 영상이 나타나고 비건디가 위로 올라감 → (2)맨 위에 닿으면 스티키 고정
-   → (3)고정된 채 스크롤하면 영상이 재생(스크럽) → (4)다 재생되면 고정이 풀려 아래로. 소리 없음 */
+/* CAST 시퀀스(이미지 시퀀스 스크럽): (1)스크롤하면 첫 프레임이 나타나고 비건디가 위로 → (2)맨 위에 닿으면 고정
+   → (3)고정된 채 스크롤하면 프레임이 한 장씩 바뀌며 재생 → (4)다 재생되면 고정 풀려 아래로. 무음(이미지) */
 (function(){
   const pin = document.querySelector(".cast-pin");
-  const img = document.querySelector(".cast__img");   // <video>
-  if(!pin || !img) return;
+  const canvas = document.querySelector(".cast__img");   // <canvas>
+  if(!pin || !canvas || !canvas.getContext) return;
   const band = document.querySelector(".cast__band");
-  const roles = Array.prototype.slice.call(document.querySelectorAll(".cast__role"));
   const clamp = (v,a,b)=> v<a?a:(v>b?b:v);
-  const isVideo = img.tagName === "VIDEO";
-  if(isVideo){ img.muted = true; }   // 소리 재생 안 함
-  // 영상 좌우 여백(밴드) 색을 현재 프레임의 배경색과 똑같이 맞춘다 → 이음선 제거
+  const VIDEO_RUNWAY = 1000;   // 고정 후 이만큼 스크롤하면 마지막 프레임까지 (이후는 점→이름 구간)
+  const FRAME_COUNT = 120;     // 추출한 프레임 수(12fps × 10초)
+  const ctx = canvas.getContext("2d", {willReadFrequently:true});
+  const frames = new Array(FRAME_COUNT);
+  let lastIdx = -1;
+  // 프레임 프리로드
+  for(let i=0;i<FRAME_COUNT;i++){
+    const im = new Image();
+    im.decoding = "async";
+    im.src = "assets/images/5color-seq/f_" + String(i+1).padStart(3,"0") + ".jpg";
+    if(i===0){ im.onload = function(){ draw(0); }; }
+    frames[i] = im;
+  }
   let bgCanvas, bgCtx;
   function syncBandBg(){
-    if(!isVideo || !band || img.readyState < 2 || !img.videoWidth) return;
+    if(!band) return;
     try{
-      if(!bgCanvas){ bgCanvas = document.createElement("canvas"); bgCanvas.width = 2; bgCanvas.height = 2; bgCtx = bgCanvas.getContext("2d", {willReadFrequently:true}); }
-      // 영상 맨 왼쪽 가장자리(인물 없는 순수 배경)의 중간 높이를 샘플링 → 좌우 솔리드 밴드와 이음새 없음
-      const W = img.videoWidth, H = img.videoHeight;
-      bgCtx.drawImage(img, 0, Math.round(H*0.4), Math.max(2,Math.round(W*0.02)), Math.round(H*0.2), 0, 0, 2, 2);
-      const d = bgCtx.getImageData(0, 1, 1, 1).data;
+      if(!bgCanvas){ bgCanvas = document.createElement("canvas"); bgCanvas.width = 1; bgCanvas.height = 1; bgCtx = bgCanvas.getContext("2d", {willReadFrequently:true}); }
+      // 사진 맨 왼쪽 가장자리(이음선 위치)의 세로 띠를 1px로 평균 → 좌우 솔리드 밴드와 색 일치(이음선 제거)
+      bgCtx.drawImage(canvas, 0, Math.round(canvas.height*0.25), 2, Math.round(canvas.height*0.5), 0, 0, 1, 1);
+      const d = bgCtx.getImageData(0, 0, 1, 1).data;
       band.style.backgroundColor = "rgb(" + d[0] + "," + d[1] + "," + d[2] + ")";
     }catch(e){}
   }
-  let raf = 0, target = 0;
-  function seek(){
-    raf = 0;
-    if(img.readyState >= 1 && isFinite(target)){ try{ img.currentTime = target; }catch(e){} }
+  function draw(idx){
+    const f = frames[idx];
+    if(!f || !f.complete || !f.naturalWidth){
+      // 아직 안 받아진 프레임이면 가장 가까운 받아진 프레임을 찾아 그린다
+      let j = idx;
+      while(j>=0 && (!frames[j] || !frames[j].complete || !frames[j].naturalWidth)) j--;
+      if(j<0) return;
+      idx = j;
+    }
+    ctx.drawImage(frames[idx], 0, 0, canvas.width, canvas.height);
+    lastIdx = idx;
+    syncBandBg();
   }
-  const VIDEO_RUNWAY = 1000;   // 고정 후 이만큼 스크롤하면 영상이 끝까지 재생 (이후는 점→이름 구간)
   function update(){
     const vh = window.innerHeight;
     const rect = pin.getBoundingClientRect();
     const total = pin.offsetHeight - vh;
     const y = window.scrollY;
-    // (1) 접근 중: 영상(첫 프레임=이미지)이 서서히 나타난다
-    img.style.opacity = clamp(y / 360, 0, 1).toFixed(3);
-    // (2)(3) 비건디 무대가 맨 위(rect.top<=0)에 닿아 고정되면, 스크롤한 만큼 영상을 재생
+    // (1) 접근 중: 첫 프레임(이미지)이 서서히 나타난다
+    canvas.style.opacity = clamp(y / 360, 0, 1).toFixed(3);
+    // (2)(3) 고정되면 스크롤한 만큼 프레임 진행
     const pinnedScroll = (rect.top <= 0 && total > 0) ? clamp(-rect.top, 0, total) : 0;
     const p = clamp(pinnedScroll / VIDEO_RUNWAY, 0, 1);
-    if(isVideo){
-      const dur = img.duration || 0;
-      if(dur){ target = p * dur; if(!raf){ raf = requestAnimationFrame(seek); } }
-    }
-  }
-  if(isVideo){
-    img.addEventListener("loadedmetadata", update);
-    img.addEventListener("loadeddata", syncBandBg);
-    img.addEventListener("seeked", syncBandBg);
+    const idx = Math.round(p * (FRAME_COUNT - 1));
+    if(idx !== lastIdx){ draw(idx); }
   }
   update();
-  syncBandBg();
   window.addEventListener("scroll", update, {passive:true});
   window.addEventListener("resize", update, {passive:true});
 })();
