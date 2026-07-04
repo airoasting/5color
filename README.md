@@ -4,7 +4,9 @@
 
 생성된 마크다운을 프로젝트 지침 박스에 그대로 붙이시면, 이후 그 프로젝트의 모든 산출물이 5색 평가 레이어를 자동으로 통과합니다.
 
-작업 영역을 즉석에서 캐스팅하는 이 스킬 외에, 자주 쓰는 65개 영역을 미리 캐스팅해 둔 카드 갤러리(`index.html`)도 함께 있습니다. 아래 [동봉 카드 갤러리](#동봉-카드-갤러리)를 보십시오.
+**라이브**: [5color.vercel.app](https://5color.vercel.app)
+
+작업 영역을 즉석에서 캐스팅하는 이 스킬 외에, 자주 쓰는 65개 영역을 미리 캐스팅해 둔 카드 갤러리([5color.vercel.app](https://5color.vercel.app), 저장소의 `index.html`)도 함께 있습니다. 아래 [동봉 카드 갤러리](#동봉-카드-갤러리)를 보십시오.
 
 ---
 
@@ -20,15 +22,16 @@
 
 세 비평가는 서로 다른 사고 모드입니다. 한 색이 다른 색의 자리에 침범하면 그 발언은 무효입니다. GOLD는 인구통계가 아니라 상황(예. "월요일 9시 30분, 이사회 직전에 5장짜리 보고서를 처음 펼친 CEO")으로 정의합니다.
 
-자세한 캐스팅 9원칙과 출력 템플릿은 [SKILL.md](SKILL.md)를 보십시오.
+자세한 캐스팅 9원칙과 출력 템플릿은 [SKILL.md](5color/SKILL.md)를 보십시오.
 
 ---
 
 ## 60초 시작
 
 ```bash
-git clone https://github.com/airoasting/5color-harness.git \
-  ~/.claude/skills/5color-harness
+# 저장소를 받고, 스킬 본체(저장소의 5color/ 하위 폴더)를 Claude Code 스킬 폴더로 복사합니다.
+git clone https://github.com/airoasting/5color.git
+cp -r 5color/5color ~/.claude/skills/5color
 ```
 
 1. Claude Code 세션을 새로 열고 한 단어를 칩니다. 예. "이메일".
@@ -36,7 +39,7 @@ git clone https://github.com/airoasting/5color-harness.git \
 3. 펜스 안 블록을 통째로 복사해 Claude Projects 또는 ChatGPT Projects의 지침 박스에 붙이고 저장합니다.
 4. 이후 그 프로젝트에서 BLACK이 1차 산출물을 만들고 RED·SILVER·BLUE·GOLD 4인이 자동 평가합니다.
 
-claude.ai 웹에서 skill 자동 로딩 없이 쓰시려면 [SKILL.md](SKILL.md) 본문(frontmatter 제외)을 그대로 Project instructions에 붙이시면 같은 동작을 합니다.
+claude.ai 웹에서 skill 자동 로딩 없이 쓰시려면 [SKILL.md](5color/SKILL.md) 본문(frontmatter 제외)을 그대로 Project instructions에 붙이시면 같은 동작을 합니다.
 
 ---
 
@@ -48,7 +51,7 @@ claude.ai 웹에서 skill 자동 로딩 없이 쓰시려면 [SKILL.md](SKILL.md)
 - 영문 단어 단독: "email", "deck", "memo", "resume"
 - 문장형: "외부 비즈니스 이메일 지침", "make a system prompt for cover letter"
 
-영문 트리거는 [`references/english-augment.md`](references/english-augment.md)가 자동 추가되어 BLACK·GOLD가 영어 환경 인물로 캐스팅되고 평가도 영문으로 나옵니다.
+영문 트리거는 [`references/english-augment.md`](5color/references/english-augment.md)가 자동 추가되어 BLACK·GOLD가 영어 환경 인물로 캐스팅되고 평가도 영문으로 나옵니다.
 
 복합 산출물(예. "영업 덱+발표 스크립트")은 본체 한 영역을 결정하고 부속을 BLACK 제약에 흡수합니다. 시리즈물은 캐스팅에 고정 자산 한 줄이 추가됩니다.
 
@@ -60,7 +63,7 @@ claude.ai 웹에서 skill 자동 로딩 없이 쓰시려면 [SKILL.md](SKILL.md)
 
 ## 카테고리·합격선·종결 체
 
-상세한 표는 [SKILL.md](SKILL.md)에 들어 있습니다. 요약입니다.
+상세한 표는 [SKILL.md](5color/SKILL.md)에 들어 있습니다. 요약입니다.
 
 - **카테고리 8개.** 의사결정·전략, 분석·보고서, 외부 커뮤니케이션, 마케팅, 내부 커뮤니케이션, 법무 검토·규제 대응, 커리어·상담, 소셜미디어·글쓰기. 표에 없는 과제는 외부 커뮤니케이션이 최종 fallback.
 - **합격선 3군.** 9.0(시·소설·블로그처럼 작가 톤이 자산), 9.5(표준), 9.7(계약서·이사회·IR·위기 대응처럼 결함이 곧 손실).
@@ -91,10 +94,11 @@ claude.ai 웹에서 skill 자동 로딩 없이 쓰시려면 [SKILL.md](SKILL.md)
 
 ## 폴더 구조
 
+저장소 루트에 이 README와 카드 갤러리(`index.html`)가 있고, 스킬 본체는 `5color/` 하위 폴더입니다.
+
 ```
-5color-harness/
+5color/                       스킬 본체 (Claude Code 스킬 폴더로 복사)
 ├── SKILL.md                  스킬 본문
-├── README.md                 이 파일
 ├── LICENSE                   Apache License 2.0
 ├── references/               카테고리별 매핑·문체·금지 뱅크
 │   ├── decision-strategy.md  의사결정·전략
@@ -110,7 +114,7 @@ claude.ai 웹에서 skill 자동 로딩 없이 쓰시려면 [SKILL.md](SKILL.md)
 └── evals/                    트리거 정확도 + 출력 품질 평가 셋 (10항목 × 6케이스)
 ```
 
-작업 영역을 추가하시려면 해당 카테고리의 `references/` 파일만 손보시면 됩니다. 처음 쓰실 때는 [`references/examples.md`](references/examples.md)의 풀 예시 5종으로 톤과 구조를 익히실 수 있습니다.
+작업 영역을 추가하시려면 해당 카테고리의 `references/` 파일만 손보시면 됩니다. 처음 쓰실 때는 [`references/examples.md`](5color/references/examples.md)의 풀 예시 5종으로 톤과 구조를 익히실 수 있습니다.
 
 ---
 
@@ -118,14 +122,14 @@ claude.ai 웹에서 skill 자동 로딩 없이 쓰시려면 [SKILL.md](SKILL.md)
 
 - **5색 평가가 자동으로 안 돕니다.** 마크다운의 `## 워크플로우` 섹션이 빠짐없이 들어갔는지 확인.
 - **9.7군인데 직접 인용 금지가 부족합니다.** "9.7군이면 직접 인용 금지 두 개 이상이어야 함"을 한 줄 던지시면 재생성.
-- **영문 트리거인데 한국어가 나옵니다.** "in English" 명시 또는 [`references/english-augment.md`](references/english-augment.md) 존재 확인.
+- **영문 트리거인데 한국어가 나옵니다.** "in English" 명시 또는 [`references/english-augment.md`](5color/references/english-augment.md) 존재 확인.
 - **페르소나 정체성 침범.** "RED는 이성, BLUE는 공감만"을 한 줄 던지시면 재캐스팅.
 - **em dash가 보입니다.** "본문 em dash 0개로 다시" 한 줄.
 
-평가 셋과 60초 sanity check는 [`evals/EVALS_GUIDE.md`](evals/EVALS_GUIDE.md)를 보십시오.
+평가 셋과 60초 sanity check는 [`evals/EVALS_GUIDE.md`](5color/evals/EVALS_GUIDE.md)를 보십시오.
 
 ---
 
 ## 라이선스
 
-Apache License 2.0. [LICENSE](LICENSE).
+Apache License 2.0. [LICENSE](5color/LICENSE).
