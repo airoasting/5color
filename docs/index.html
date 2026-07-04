@@ -1608,6 +1608,63 @@ body.is-loading .grid-section{animation-delay:.28s}
       </div>
     </div>
   </section>
+
+  <style>
+    .usage{background:var(--burgundy);color:var(--cream);padding:88px 24px 96px}
+    .usage__head{max-width:1180px;margin:0 auto 44px}
+    .usage__eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:rgba(242,216,106,.6);margin:0 0 14px}
+    .usage__title{font-family:var(--display);font-weight:800;font-size:clamp(30px,4.4vw,52px);line-height:1.08;margin:0 0 16px;color:var(--cream)}
+    .usage__title em{font-style:normal;color:var(--pink)}
+    .usage__sub{font-size:16px;line-height:1.6;color:rgba(242,216,106,.72);max-width:660px;margin:0}
+    .usage__grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+    .ucard{background:var(--cream);color:var(--burgundy);border-radius:18px;padding:22px 20px 20px;display:flex;flex-direction:column;min-height:288px}
+    .ucard__tag{align-self:flex-start;font-family:var(--mono);font-size:12px;font-weight:600;padding:5px 12px;border:1.5px solid rgba(122,31,53,.38);border-radius:999px;margin-bottom:18px}
+    .ucard__name{font-family:var(--display);font-weight:800;font-size:20px;margin:0 0 10px;line-height:1.15}
+    .ucard__desc{font-size:14px;line-height:1.55;color:rgba(122,31,53,.82);margin:0 0 auto;padding-bottom:18px}
+    .ucard__ex{font-family:var(--mono);font-size:13px;line-height:1.5;background:#2a0f1b;color:var(--cream);border-radius:12px;padding:13px 15px;word-break:keep-all}
+    .ucard__exk{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,216,106,.45);margin-bottom:6px}
+    @media (max-width:1000px){.usage{padding:64px 18px 72px}.usage__grid{grid-template-columns:repeat(2,1fr)}.ucard{min-height:0}}
+    @media (max-width:560px){.usage__grid{grid-template-columns:1fr}}
+  </style>
+  <section class="usage" aria-label="스킬 활용법">
+    <div class="usage__head">
+      <p class="usage__eyebrow">HOW TO USE</p>
+      <h2 class="usage__title">한 단어로 시작하는 <em>다섯 가지 활용</em></h2>
+      <p class="usage__sub">작업의 성격에 맞춰 입력만 바꾸면, 나머지는 지침이 알아서 캐스팅합니다.</p>
+    </div>
+    <div class="usage__grid">
+      <article class="ucard">
+        <span class="ucard__tag">단어 하나</span>
+        <h3 class="ucard__name">기본</h3>
+        <p class="ucard__desc">작업 종류를 한 단어로 치면 그 자리에서 5인 지침이 나옵니다.</p>
+        <div class="ucard__ex"><span class="ucard__exk">입력</span>이메일</div>
+      </article>
+      <article class="ucard">
+        <span class="ucard__tag">문장형</span>
+        <h3 class="ucard__name">상황 얹기</h3>
+        <p class="ucard__desc">조건이나 상황을 덧붙여도 그대로 캐스팅합니다.</p>
+        <div class="ucard__ex"><span class="ucard__exk">입력</span>사과문, 9.7 보정으로</div>
+      </article>
+      <article class="ucard">
+        <span class="ucard__tag">EN</span>
+        <h3 class="ucard__name">영문 트리거</h3>
+        <p class="ucard__desc">영문으로 요청하면 인물도 평가도 영문으로 나옵니다.</p>
+        <div class="ucard__ex"><span class="ucard__exk">입력</span>system prompt for board memo</div>
+      </article>
+      <article class="ucard">
+        <span class="ucard__tag">복합</span>
+        <h3 class="ucard__name">두 산출물</h3>
+        <p class="ucard__desc">본체와 부속으로 묶어 두 산출물을 한 번에 만듭니다.</p>
+        <div class="ucard__ex"><span class="ucard__exk">입력</span>영업 덱이랑 발표 스크립트 같이</div>
+      </article>
+      <article class="ucard">
+        <span class="ucard__tag">시리즈</span>
+        <h3 class="ucard__name">회차 유지</h3>
+        <p class="ucard__desc">연재로 이어지면 톤과 고정 자산을 회차 간에 지킵니다.</p>
+        <div class="ucard__ex"><span class="ucard__exk">입력</span>주간 뉴스레터 3호차, 지난 호 톤 유지</div>
+      </article>
+    </div>
+  </section>
 </main>
 
 <footer class="foot">
