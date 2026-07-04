@@ -24,16 +24,15 @@
 
 세 비평가는 사고 모드가 서로 다릅니다. 한 색이 다른 색의 자리를 침범하면 그 발언은 무효입니다. GOLD는 인구통계가 아니라 상황으로 정의합니다. 예를 들어 "월요일 9시 30분, 이사회 직전에 5장짜리 보고서를 처음 펼친 CEO"입니다.
 
-자세한 캐스팅 9원칙과 출력 템플릿은 [SKILL.md](5color/SKILL.md)에 있습니다.
+자세한 캐스팅 9원칙과 출력 템플릿은 [SKILL.md](SKILL.md)에 있습니다.
 
 ---
 
 ## 60초 시작
 
 ```bash
-# 저장소를 받고, 스킬 본체(저장소의 5color/ 하위 폴더)를 Claude Code 스킬 폴더로 복사합니다.
-git clone https://github.com/airoasting/5color.git
-cp -r 5color/5color ~/.claude/skills/5color
+# 저장소를 Claude Code 스킬 폴더로 바로 클론합니다. 저장소 루트가 곧 스킬입니다.
+git clone https://github.com/airoasting/5color.git ~/.claude/skills/5color
 ```
 
 1. Claude Code 세션을 새로 열고 한 단어를 칩니다. 예를 들어 "이메일"입니다.
@@ -41,7 +40,7 @@ cp -r 5color/5color ~/.claude/skills/5color
 3. 펜스 안 블록을 통째로 복사해 Claude Projects나 ChatGPT Projects의 지침 박스에 붙이고 저장합니다.
 4. 그 뒤로 그 프로젝트에서 BLACK이 1차 산출물을 만들고 RED·SILVER·BLUE·GOLD 네 명이 자동으로 평가합니다.
 
-claude.ai 웹에서 스킬 자동 로딩 없이 쓰시려면, [SKILL.md](5color/SKILL.md) 본문(frontmatter 제외)을 그대로 Project instructions에 붙이면 같은 동작을 합니다.
+claude.ai 웹에서 스킬 자동 로딩 없이 쓰시려면, [SKILL.md](SKILL.md) 본문(frontmatter 제외)을 그대로 Project instructions에 붙이면 같은 동작을 합니다.
 
 ---
 
@@ -53,7 +52,7 @@ claude.ai 웹에서 스킬 자동 로딩 없이 쓰시려면, [SKILL.md](5color/
 - 영문 단어 하나: "email", "deck", "memo", "resume"
 - 문장: "외부 비즈니스 이메일 지침", "make a system prompt for cover letter"
 
-영문 트리거는 [`references/english-augment.md`](5color/references/english-augment.md)를 자동으로 함께 읽어, BLACK과 GOLD를 영어 환경 인물로 캐스팅하고 평가도 영문으로 진행합니다.
+영문 트리거는 [`references/english-augment.md`](references/english-augment.md)를 자동으로 함께 읽어, BLACK과 GOLD를 영어 환경 인물로 캐스팅하고 평가도 영문으로 진행합니다.
 
 복합 산출물, 예를 들어 "영업 덱과 발표 스크립트"는 본체 한 영역을 정하고 나머지를 BLACK의 제약으로 흡수합니다. 시리즈물이면 캐스팅에 고정 자산 한 줄이 붙습니다.
 
@@ -65,7 +64,7 @@ claude.ai 웹에서 스킬 자동 로딩 없이 쓰시려면, [SKILL.md](5color/
 
 ## 카테고리·합격선·종결 체
 
-상세한 표는 [SKILL.md](5color/SKILL.md)에 있습니다. 요약은 이렇습니다.
+상세한 표는 [SKILL.md](SKILL.md)에 있습니다. 요약은 이렇습니다.
 
 - **카테고리 8개.** 의사결정·전략, 분석·보고서, 외부 커뮤니케이션, 마케팅, 내부 커뮤니케이션, 법무 검토·규제 대응, 커리어·상담, 소셜미디어·글쓰기입니다. 표에 없는 과제는 외부 커뮤니케이션을 최종 fallback으로 씁니다.
 - **합격선 3군.** 9.0은 시·소설·블로그처럼 작가의 톤이 자산인 영역이고, 9.5는 표준이며, 9.7은 계약서·이사회·IR·위기 대응처럼 결함이 곧 손실인 영역입니다.
@@ -96,12 +95,14 @@ claude.ai 웹에서 스킬 자동 로딩 없이 쓰시려면, [SKILL.md](5color/
 
 ## 폴더 구조
 
-저장소 루트에 이 README와 카드 갤러리(`index.html`)가 있고, 스킬 본체는 `5color/` 하위 폴더입니다.
+저장소 루트가 곧 스킬입니다. `SKILL.md`와 `references/`·`evals/`가 스킬 본체이고, 카드 갤러리(`index.html`)와 이 README가 함께 있습니다.
 
 ```
-5color/                       스킬 본체 (Claude Code 스킬 폴더로 복사)
+5color/  (저장소 루트 = 스킬)
 ├── SKILL.md                  스킬 본문
+├── README.md                 이 파일
 ├── LICENSE                   Apache License 2.0
+├── index.html                카드 갤러리 (라이브: 5color.vercel.app)
 ├── references/               카테고리별 매핑·문체·금지 뱅크
 │   ├── decision-strategy.md  의사결정·전략
 │   ├── analysis-report.md    분석·보고서
@@ -113,10 +114,12 @@ claude.ai 웹에서 스킬 자동 로딩 없이 쓰시려면, [SKILL.md](5color/
 │   ├── social-writing.md     소셜미디어·글쓰기
 │   ├── english-augment.md    영문 트리거 시 자동 추가
 │   └── examples.md           풀 출력 예시 5종
-└── evals/                    트리거 정확도·출력 품질 평가 셋 (10항목 × 6케이스)
+├── evals/                    트리거 정확도·출력 품질 평가 셋 (10항목 × 6케이스)
+├── assets/                   카드 갤러리 이미지·폰트
+└── output/                   카드 감사·라우팅 리포트
 ```
 
-작업 영역을 추가하려면 해당 카테고리의 `references/` 파일만 손보면 됩니다. 처음 쓰실 때는 [`references/examples.md`](5color/references/examples.md)의 풀 예시 5종으로 톤과 구조를 익히실 수 있습니다.
+작업 영역을 추가하려면 해당 카테고리의 `references/` 파일만 손보면 됩니다. 처음 쓰실 때는 [`references/examples.md`](references/examples.md)의 풀 예시 5종으로 톤과 구조를 익히실 수 있습니다.
 
 ---
 
@@ -124,14 +127,14 @@ claude.ai 웹에서 스킬 자동 로딩 없이 쓰시려면, [SKILL.md](5color/
 
 - **5색 평가가 자동으로 돌지 않습니다.** 마크다운에 `## 워크플로우` 섹션이 빠짐없이 들어갔는지 확인합니다.
 - **9.7군인데 직접 인용 금지가 부족합니다.** "9.7군이면 직접 인용 금지가 두 개 이상이어야 한다"고 한 줄 던지면 다시 생성합니다.
-- **영문 트리거인데 한국어가 나옵니다.** "in English"를 명시하거나, [`references/english-augment.md`](5color/references/english-augment.md)가 있는지 확인합니다.
+- **영문 트리거인데 한국어가 나옵니다.** "in English"를 명시하거나, [`references/english-augment.md`](references/english-augment.md)가 있는지 확인합니다.
 - **페르소나가 서로의 자리를 침범합니다.** "RED는 이성, BLUE는 공감만"이라고 한 줄 던지면 다시 캐스팅합니다.
 - **em dash가 보입니다.** "본문 em dash 0개로 다시"라고 한 줄 던집니다.
 
-평가 셋과 60초 점검법은 [`evals/EVALS_GUIDE.md`](5color/evals/EVALS_GUIDE.md)에 있습니다.
+평가 셋과 60초 점검법은 [`evals/EVALS_GUIDE.md`](evals/EVALS_GUIDE.md)에 있습니다.
 
 ---
 
 ## 라이선스
 
-Apache License 2.0입니다. 전문은 [LICENSE](5color/LICENSE)에 있습니다.
+Apache License 2.0입니다. 전문은 [LICENSE](LICENSE)에 있습니다.
