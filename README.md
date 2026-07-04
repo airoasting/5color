@@ -36,7 +36,7 @@ git clone https://github.com/airoasting/5color.git ~/.claude/skills/5color
 ```
 
 1. Claude Code 세션을 새로 열고 한 단어를 칩니다. 예를 들어 "이메일"입니다.
-2. ````markdown 코드펜스로 감싼 마크다운 한 묶음이 나옵니다. 한국어 1500~3500자, 영문 700~1700단어이고, 안내 문구는 펜스 바깥에 붙습니다.
+2. 마크다운 한 묶음이 코드펜스로 감싸여 나옵니다. 한국어 1500~3500자, 영문 700~1700단어이고, 안내 문구는 펜스 바깥에 붙습니다.
 3. 펜스 안 블록을 통째로 복사해 Claude Projects나 ChatGPT Projects의 지침 박스에 붙이고 저장합니다.
 4. 그 뒤로 그 프로젝트에서 BLACK이 1차 산출물을 만들고 RED·SILVER·BLUE·GOLD 네 명이 자동으로 평가합니다.
 
