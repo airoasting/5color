@@ -1,6 +1,6 @@
 # 5-Color Harness
 
-[![5-Color Harness](assets/thumbnail.png)](https://5color.vercel.app)
+[![5-Color Harness](docs/assets/thumbnail.png)](https://5color.vercel.app)
 
 화이트칼라 작업 영역을 한 단어라도 말하면, 그 영역 전용 Claude·ChatGPT 프로젝트 system instruction을 즉시 만들어 주는 Claude Code 스킬입니다. 이메일, 보고서, PPT, 계약서, 이력서 어느 것이든 됩니다.
 
@@ -95,14 +95,13 @@ claude.ai 웹에서 스킬 자동 로딩 없이 쓰시려면, [SKILL.md](SKILL.m
 
 ## 폴더 구조
 
-저장소 루트가 곧 스킬입니다. `SKILL.md`와 `references/`·`evals/`가 스킬 본체이고, 카드 갤러리(`index.html`)와 이 README가 함께 있습니다.
+저장소 루트가 곧 스킬입니다. `SKILL.md`와 `references/`·`evals/`가 스킬 본체이고, 카드 갤러리는 `docs/`에, 이 README는 루트에 있습니다.
 
 ```
 5color/  (저장소 루트 = 스킬)
 ├── SKILL.md                  스킬 본문
 ├── README.md                 이 파일
 ├── LICENSE                   Apache License 2.0
-├── index.html                카드 갤러리 (라이브: 5color.vercel.app)
 ├── references/               카테고리별 매핑·문체·금지 뱅크
 │   ├── decision-strategy.md  의사결정·전략
 │   ├── analysis-report.md    분석·보고서
@@ -115,7 +114,9 @@ claude.ai 웹에서 스킬 자동 로딩 없이 쓰시려면, [SKILL.md](SKILL.m
 │   ├── english-augment.md    영문 트리거 시 자동 추가
 │   └── examples.md           풀 출력 예시 5종
 ├── evals/                    트리거 정확도·출력 품질 평가 셋 (10항목 × 6케이스)
-├── assets/                   카드 갤러리 이미지·폰트
+├── docs/                     카드 갤러리 (라이브: 5color.vercel.app)
+│   ├── index.html            갤러리 페이지
+│   └── assets/               이미지·폰트·로고
 └── output/                   카드 감사·라우팅 리포트
 ```
 
