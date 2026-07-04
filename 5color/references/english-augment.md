@@ -1,9 +1,10 @@
 # 영문 산출물 보강
 
-영문 산출물은 한국어 카테고리 파일의 구조 원칙(RED 이성·SILVER 분야 전문가·BLUE 공감 정체성, 9.5점 장면 기준, BLACK 15년차+)을 그대로 가져오되 다음을 추가한다. 한국어 뱅크의 "번역투 금지" 자리에 아래 규칙으로 갈아 끼운다. em dash(—, –) 본문 0회 정책은 한국어와 영문 모두 동일하게 강제하며, 영문에서도 마침표·세미콜론·쉼표·괄호로 대체한다. 단, 숫자 범위(350-500 words, 6-10처럼 수 사이)는 산문 dash가 아니므로 이 규칙의 대상이 아니다. 영문 산출물의 수 범위는 en dash(–) 대신 하이픈(-)이나 "to"(350 to 500)로 적어 산문 em dash와 구분한다. 산출물도 한국어와 동일하게 ````markdown 코드펜스 한 묶음으로 감싸고, 안내 문구는 코드펜스 바깥에 둔다.
+영문 산출물은 한국어 카테고리 파일의 구조 원칙(RED 이성·SILVER 분야 전문가·BLUE 공감 정체성, 9.5점 장면 기준, BLACK 15년차+)을 그대로 가져오되 다음을 추가한다. 한국어 뱅크의 "번역투 금지" 자리에 아래 규칙으로 갈아 끼운다. em dash(—, –) 본문 0회 정책은 한국어와 영문 모두 동일하게 강제하며, 영문에서도 마침표·세미콜론·쉼표·괄호로 대체한다. 단, 숫자 범위(350-500 words, 6-10처럼 수 사이)는 산문 dash가 아니므로 이 규칙의 대상이 아니다. 영문 산출물의 수 범위는 en dash(–) 대신 하이픈(-)이나 "to"(350 to 500)로 적어 산문 em dash와 구분한다. 산출물도 한국어와 동일하게 ````markdown 코드펜스 한 묶음으로 감싸고, 안내 문구는 코드펜스 바깥에 둔다. 영문 산출물은 코드펜스 바깥 마지막 줄의 안내 문구도 영문으로 적는다. 산출물 전체가 영어인데 안내 한 줄만 한국어로 남으면 영어권 사용자가 그 줄을 읽지 못한다. 영문 안내 문구는 "Paste the markdown above into your new Claude Project's (or ChatGPT Project's) instructions box."로 적는다.
 
 ## 문체 공통
 
+- **종결 체 자리는 영어에 없다.** 한국어의 종결 체(`~이다`·`~합니다`)에 대응하는 문법 장치가 영어에는 없으므로, BLACK 캐스팅의 종결 체 자리를 `~ed` 같은 한국어 어미의 음차로 옮기지 않는다. `~ed`는 "-ed로 끝나는 동사"로 읽혀 현재형을 금지하는 뜻이 되어 메모 산문과 정반대다. 이 자리는 영어의 문체 레지스터로 적는다. 예. "declarative, present or past tense as the fact requires, no hedging, no trailing sign-off". 격식 수준(formal·plain·conversational)과 인칭(first person "we" 또는 3인칭)을 한 줄로 명시한다.
 - **능동태 우선.** "It was decided that we would" → "We decided to". 수동태는 책임 회피 신호.
 - **명사형 도피 금지.** "consideration of options" → "considering options". "implementation of changes" → "implementing changes".
 - **강한 동사 한 번.** "make a decision" → "decide". "have a discussion" → "discuss".
@@ -52,14 +53,18 @@
 
 한국 화이트칼라 GOLD를 그대로 두지 않는다. 영문 산출물의 GOLD는 영어 모국어 또는 영어 비즈니스 환경 일상 사용자로 다시 캐스팅한다. 예. "Tuesday 9am NYC, the SaaS startup CFO scrolling email on iPhone before the standup", "Wednesday 8:30am London, the FTSE100 board secretary printing the agenda for the chair", "Friday 4pm Singapore, the Series B founder reading the pitch deck on flight to roadshow".
 
+이 세 장면은 예시일 뿐 기본값이 아니다. GOLD는 이 산출물의 실제 독자이므로, 사용자가 관할·시장·독자를 밝히면 그쪽으로 캐스팅한다. 밝히지 않으면 US·UK 어느 한쪽에 고정하지 말고 그 작업 영역의 보편적 장면으로 잡되(예. "the board secretary printing the agenda before the meeting"), 위 예시의 지역 어휘(London의 "table·resolution" 같은)를 그대로 복사하지 않는다. 미국식·영국식 철자와 관용은 BLACK 캐스팅에서 정한 한 갈래를 GOLD도 따른다.
+
 ## 평가 언어
 
 한국어 산출물은 한국어로, 영문 산출물은 영문으로 평가한다. 한국어 평가에서 영문 산출물의 문법·관용 표현 미스를 잡지 못하므로, **영문 산출물은 평가 발화도 영문으로** 한다. 비평가 톤 풀도 영문으로 바꿔 적는다 (dry, blunt, sharp, calm, meticulous, cool, skeptical, terse, candid, practitioner-direct).
 
 ## 영문 산출물 자체 점검 추가 항목
 
-- BLACK 캐스팅과 GOLD가 영어 비즈니스 환경 인물로 다시 캐스팅됐는가. 한국 화이트칼라 GOLD를 그대로 두지 않았는가.
+- BLACK 캐스팅과 GOLD가 영어 비즈니스 환경 인물로 다시 캐스팅됐는가. 한국 화이트칼라 GOLD를 그대로 두지 않았는가. GOLD가 위 예시 장면을 그대로 복사하지 않고 이 산출물의 실제 독자로 잡혔는가.
+- BLACK 종결 체 자리가 `~ed` 같은 한국어 어미 음차가 아니라 영어 문체 레지스터(예. "declarative, present or past tense, no hedging")로 적혔는가.
 - 분량 가이드가 영문 단어 수 기준인가. 한국어 글자 수를 그대로 옮기지 않았는가.
 - 평가 발화도 영문으로 진행되도록 명시됐는가.
+- 코드펜스 바깥 안내 문구가 영문으로 적혔는가(산출물이 영어인데 안내 한 줄만 한국어로 남지 않았는가).
 - 영문 보강 섹션의 클리셰 차단 목록이 작업 영역 특화 금지에 흡수됐는가.
 - 9.7 영문 영역이면 그 영역의 흔한 영문 실패 문구(위 작업 영역별 영문 보정 예시 참고)가 직접 인용 두 줄 이상 들어갔는가.
