@@ -6,7 +6,12 @@
      진짜 일은 본인성과 스테이크가 동시에 높은 곳에서만 발생한다.
   2. 게이트를 통과한 카드만 총점으로 줄을 세워 상위 N장을 뽑는다.
   3. EDITORIAL_PICKS를 더한다. 게이트를 못 넘었지만 편집자 판단으로 올린 카드다.
-  4. 전체를 총점으로 줄 세운다. 동점이면 O+S가 높은 쪽이 앞선다.
+
+점수는 '어느 카드를 픽할지'만 정한다. '어떤 순서로 보일지'는 카드 번호가 정한다.
+전에는 진열창을 총점 순으로 깔았는데, 그 순위는 화면에 안 보이고 카드 번호만
+06 -> 12 -> 01처럼 헝클어져 보였다. 읽는 사람이 못 읽는 정보를 심어봐야
+번호의 예측 가능성만 잃는다. 번호는 카드 고유값이라(docs/index.html의 order + 1)
+필터를 바꿔도 따라 움직이지 않는다. 오름차순이 가장 읽기 쉽다.
 
 손으로 index.html의 pick 필드를 고치지 않는다. 이 파일을 고치고 다시 돌린다.
 점수를 원하는 결과가 나오게 조정하지 않는다. 점수는 관찰이고, 예외는 예외로 적는다.
@@ -93,6 +98,14 @@ def strip_html(s):
     return re.sub("<.*?>", "", s)
 
 
+def card_number(cid):
+    """카드에 찍히는 번호. docs/index.html이 order + 1을 두 자리로 찍는다.
+
+    id가 p1..p35이고 order가 0..34라 id 숫자와 화면 번호가 같다.
+    """
+    return int(cid[1:])
+
+
 def gate(cid, scores):
     F, S, O, D, W = scores[cid]
     return O >= GATE_O and S >= GATE_S
@@ -104,11 +117,14 @@ def rank(cid, scores):
 
 
 def select(scores, n=N_PICKS):
-    """게이트 통과 상위 n장 + 편집자 예외. 전체를 총점(동점이면 O+S)으로 줄 세운다."""
+    """뽑기는 점수로, 줄 세우기는 카드 번호로.
+
+    반환하는 picks는 카드 번호(order) 오름차순이다. 진열창에 그대로 깔린다.
+    """
     passed = sorted((rank(c, scores) + (c,) for c in scores if gate(c, scores)), reverse=True)
     by_gate = passed[:n]
     editorial = [rank(c, scores) + (c,) for c in EDITORIAL_PICKS if c in scores]
-    picks = sorted(by_gate + editorial, reverse=True)
+    picks = sorted(by_gate + editorial, key=lambda r: card_number(r[2]))
     return picks, passed, by_gate
 
 
@@ -126,10 +142,11 @@ def main():
 
     print(f"게이트 O>={GATE_O} AND S>={GATE_S} 통과: {len(passed)}장 / 전체 {len(SCORES)}장")
     print(f"선정 {len(picks)}장 = 게이트 {len(by_gate)}장 + 편집자 예외 {len(EDITORIAL_PICKS)}장\n")
-    print(f"=== 선정 {len(picks)}장 (진열창 노출 순) ===")
-    for i, (tot, os_, cid) in enumerate(picks, 1):
+    print(f"=== 선정 {len(picks)}장 (진열창 노출 순 = 카드 번호 오름차순) ===")
+    for tot, os_, cid in picks:
         tag = "게이트" if cid in gate_ids else "예외  "
-        print(f"  {i}. [{prompts[cid]['folio']:6s}] {title(cid):22s} 총점 {tot:.1f}  O+S {os_:.1f}  {tag}  ({prompts[cid]['cat']})")
+        num = f"{card_number(cid):02d}"
+        print(f"  {num}  [{prompts[cid]['folio']:6s}] {title(cid):22s} 총점 {tot:.1f}  O+S {os_:.1f}  {tag}  ({prompts[cid]['cat']})")
 
     if EDITORIAL_PICKS:
         print(f"\n=== 편집자 예외 사유 ===")
