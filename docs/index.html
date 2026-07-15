@@ -655,26 +655,29 @@ em,.serif{
   max-width:1320px;
   margin:0 auto;
   padding:0 28px;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:space-between;
-  gap:6px;
+  /* 칩 폭을 모두 같게 한다. space-between은 칩마다 여백이 달라져 줄이 들쭉날쭉해 보인다.
+     auto-fit이라 좁은 화면에서는 열 수만 줄고 폭은 여전히 균등하다. */
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(148px, 1fr));
+  gap:10px;
 }
 .chip{
   display:inline-flex;
   align-items:center;
-  gap:8px;
-  padding:6px 14px;
+  justify-content:center;
+  gap:6px;
+  padding:7px 10px;
   border-radius:999px;
   background:transparent;
   color:var(--burgundy);
   border:1.5px solid var(--burgundy);
   font-family:var(--sans);
   font-weight:600;
-  font-size:12.5px;
-  letter-spacing:0;
+  font-size:12px;
+  letter-spacing:-0.01em;
   transition:background .15s ease, color .15s ease;
   white-space:nowrap;
+  min-width:0;
 }
 .chip:hover{
   background:var(--pink);
@@ -1795,7 +1798,7 @@ function buildPromptText(state){
   // If the entry ships a curated full prompt (from casting_examples.md), use it verbatim.
   if (state.fullPrompt) return applyPersonaState(state.fullPrompt, state);
   const ps = state.personas;
-  const order = ["전략·의사결정", "이사회·투자자 대응", "파트너십·협상", "세일즈·마케팅", "조직·리더십", "위기 대응·PR", "퍼스널 브랜딩"];
+  const order = ["black","red","silver","blue","gold"];
   const enabled = order.filter(k=>ps[k].enabled);
   const critics = ["red","silver","blue"].filter(k=>ps[k].enabled);
   const evalOrder = critics.concat(ps.gold.enabled?["gold"]:[]);
@@ -1991,7 +1994,7 @@ function buildChips(){
     counts[p.cat] = (counts[p.cat]||0) + 1;
   });
   // Enforce 7-category order
-  const order = ["이사회·투자자", "전략·의사결정", "위기·대외 발언", "조직·리더십", "영업·성장", "퍼스널 브랜드", "마케팅", "법무·규제", "실무·팀"];
+  const order = ["전략·의사결정", "이사회·투자자 대응", "파트너십·협상", "세일즈·마케팅", "조직·리더십", "위기 대응·PR", "퍼스널 브랜딩"];
   cats.sort((a,b)=>{
     const ia = order.indexOf(a), ib = order.indexOf(b);
     if(ia===-1 && ib===-1) return 0;
