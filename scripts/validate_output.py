@@ -31,6 +31,26 @@ def fenced_block(text):
     return m.group(1) if m else None
 
 
+SHAPE_SECTIONS = r'출력 포맷|출력 템플릿|출력 양식|보고 양식|인용 규칙|인용 형식'
+
+
+def lines_outside_output_format(block):
+    """산출물의 생김새를 규정하는 절을 뺀 줄만 돌려준다.
+
+    그 절의 대괄호는 BLACK이 런타임에 채우는 슬롯이라 '미치환'이 아니다.
+    예. 출력 포맷의 `[도입 단락]`, 인용 규칙의 `[지표] [수치] ([출처], [시점])`.
+    이 검사가 잡으려는 것은 SKILL.md 출력 템플릿의 `[작업 영역명]`처럼
+    스킬이 채웠어야 할 자리가 빈 채로 나간 경우다. 둘을 갈라야 검사가 옳은 것을 잡는다.
+    """
+    out, skip = [], False
+    for ln in block.split('\n'):
+        if ln.startswith('#'):
+            skip = bool(re.search(SHAPE_SECTIONS, ln))
+        if not skip:
+            out.append(ln)
+    return out
+
+
 def check(text):
     v = []
     block = fenced_block(text)
@@ -46,17 +66,33 @@ def check(text):
         v.append(f'산문 em dash {len(hits)}개. 자동 fail. 마침표·쉼표·괄호·콜론 중 하나로 교체한다.')
 
     # 3. 브래킷 잔존
-    left = re.findall(r'\[[^\]\n]{1,40}\]', block)
-    left = [x for x in left if not re.match(r'\[(미확인|출처|\d+)\]', x)]
+    #    잡으려는 것은 SKILL.md 출력 템플릿의 [브래킷]이 안 채워진 채 나간 자리다.
+    #    카드가 자기 목적으로 쓰는 대괄호는 위반이 아니다. 셋을 면책한다.
+    #    (1) 출력 포맷 절의 슬롯. BLACK이 런타임에 채울 자리다. [도입 단락], [제목: ...] 같은 꼴.
+    #    (2) 색 라벨. [BLACK], [BLUE] 같은 발화자 표기.
+    #    (3) 금지 조항이 인용한 대괄호. "대괄호 [ ] 표기 금지"가 자기 자신에게 걸리면 안 된다.
+    #    em dash 검사가 규칙 인용을 면책하는 것과 같은 원리다.
+    left = []
+    for ln in lines_outside_output_format(block):
+        if re.search(r'금지|쓰지 않는다|않는다|안 쓴다', ln):
+            continue
+        for x in re.findall(r'\[[^\]\n]{1,40}\]', ln):
+            if re.match(r'\[(미확인|출처|\d+)\]', x):
+                continue
+            if re.match(r'\[(BLACK|RED|SILVER|BLUE|GOLD)\]', x):
+                continue
+            left.append(x)
     if left:
         v.append(f'[브래킷] 미치환 {len(left)}개: {", ".join(left[:5])}')
 
-    # 4. 분량 밴드 (1500~3500자)
+    # 4. 분량 밴드 (3000~5500자). 근거는 SKILL.md "출력 분량 가이드".
+    #    2026-07-15에 1500~3500에서 옮겼다. 옛 밴드는 실측이 아니라 추정이었고
+    #    카드 35장 중 28장이 위반했다. 실측 분포는 3043~5221 연속에 6956 하나가 이상치다.
     n = len(block)
-    if not (1500 <= n <= 3500):
-        why = '페르소나·문체·금지 디테일이 부족해 평가 레이어가 작동하지 않는다' if n < 1500 \
-              else '사용자가 지침 박스에 붙일 때 압도된다'
-        v.append(f'분량 {n}자. 1500~3500자 밴드를 벗어났다. {why}.')
+    if not (3000 <= n <= 5500):
+        why = '5인 페르소나·워크플로우·점수 기준·문체·금지가 다 들어가지 못해 평가 레이어가 작동하지 않는다' if n < 3000 \
+              else '이 선을 넘으면 같은 말을 두 자리에서 반복하고 있을 가능성이 높다. 중복부터 찾는다'
+        v.append(f'분량 {n}자. 3000~5500자 밴드를 벗어났다. {why}.')
 
     # 5. 끝줄 안내 (코드펜스 바깥)
     outside = text.replace(block, '') if block in text else text
@@ -75,9 +111,13 @@ def check(text):
         v.append(f'비평가 발화 톤 중복: {tones}. 셋은 서로 다른 단어여야 사고 모드가 갈린다.')
 
     # 7. 자평·메타 코멘트
+    #    금지 조항이 인용한 자리는 위반이 아니다. 카드가 '"어떠신가요" 같은 마무리는 붙이지 않는다'라고
+    #    적은 것을 잡으면, 검사를 통과하려고 금지 조항을 지우게 된다. 규칙과 위반을 뒤집는 검사가 된다.
     for bad in ('어떠신가요','어떠세요','도움이 되셨','참고하시기 바랍니다'):
-        if bad in block:
-            v.append(f'자평·메타 코멘트 "{bad}". 블록 안에서 삭제한다.')
+        for ln in block.split('\n'):
+            if bad in ln and not re.search(r'금지|않는다|말라|안 붙|삭제', ln):
+                v.append(f'자평·메타 코멘트 "{bad}". 블록 안에서 삭제한다.')
+                break
     return v
 
 
