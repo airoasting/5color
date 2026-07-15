@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Claude Code 로컬 설정
+# settings.json과 launch.json은 공유해도 되지만 local은 기기마다 다르다.
+.claude/settings.local.json
+.claude/worktrees/
+
+# skill-creator 평가 작업 공간
+# iteration별 산출물과 트리거 최적화 로그가 쌓이는 자리다. 재현 가능한 중간 산출물이라
+# 저장소에 넣지 않는다. 결론만 output/에 문서로 남긴다.
+5color-workspace/

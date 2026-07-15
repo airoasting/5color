@@ -1,0 +1,24 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "5174", "-s"],
+      "port": 5174
+    },
+    {
+      "name": "static-alt",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-s"],
+      "port": 5175,
+      "autoPort": true
+    },
+    {
+      "name": "docs",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "docs", "-l", "5176", "-s"],
+      "port": 5176
+    }
+  ]
+}
