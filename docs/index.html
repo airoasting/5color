@@ -2693,15 +2693,38 @@ const CAST = { snap:false };
     raf = requestAnimationFrame(tick);
   }
   function kick(){ if(raf === null){ lastT = 0; raf = requestAnimationFrame(tick); } }
-  // 프레임 프리로드
-  for(let i=0;i<FRAME_COUNT;i++){
+  /* 프레임 로딩.
+     240장을 한꺼번에 요청하면 첫 화면에 필요한 단 한 장(f_001.png, 740KB)이 나머지 239장과
+     대역폭을 나눠 쓰게 되어, 사진이 뜨기까지 빈 배경이 오래 남는다. 그래서 두 단계로 나눈다.
+     (1) 첫 장만 혼자 받는다. 대역폭을 독차지하므로 곧바로 그려진다.
+     (2) 그려진 뒤에 나머지를 재생 순서대로, 한 번에 CONCURRENCY장씩만 흘려보낸다.
+         순서를 지키면 먼저 필요한 프레임이 먼저 도착해, 스크롤이 로딩을 앞질러도
+         draw()의 대체 탐색이 바로 아래 프레임을 찾아내 멈춤이 눈에 띄지 않는다. */
+  const CONCURRENCY = 8;    // 동시에 받는 장수
+  function srcOf(i){
+    const ext = (i === 0 || i + 1 === FRAME_COUNT) ? ".png" : ".jpg";   // 첫·마지막 장면은 고화질 PNG
+    return "assets/images/5color-seq/f_" + String(i + 1).padStart(3, "0") + ext;
+  }
+  let queued = 1, inFlight = 0;
+  function pump(){
+    while(queued < FRAME_COUNT && inFlight < CONCURRENCY){
+      const im = new Image();
+      im.decoding = "async";
+      frames[queued++] = im;
+      // 실패해도 큐가 멈추지 않도록 onload와 onerror를 같이 넘긴다
+      im.onload = im.onerror = function(){ inFlight--; pump(); };
+      inFlight++;
+      im.src = srcOf(queued - 1);
+    }
+  }
+  (function loadFirst(){
     const im = new Image();
     im.decoding = "async";
-    const ext = (i === 0 || i+1 === FRAME_COUNT) ? ".png" : ".jpg";  // 첫·마지막 장면은 고화질 PNG
-    im.src = "assets/images/5color-seq/f_" + String(i+1).padStart(3,"0") + ext;
-    if(i===0){ im.onload = function(){ draw(0); }; }
-    frames[i] = im;
-  }
+    frames[0] = im;
+    im.onload = function(){ draw(0); pump(); };
+    im.onerror = pump;      // 첫 장이 실패해도 나머지는 받는다
+    im.src = srcOf(0);
+  })();
   let bgCanvas, bgCtx;
   function syncBandBg(){
     if(!band) return;
