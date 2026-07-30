@@ -115,10 +115,21 @@ em,.serif{
 }
 
 /* ===== Topbar ===== */
+/* 상단 헤더: 인트로(사진 시퀀스)가 끝날 때까지 숨어 있다가 나타난다.
+   fixed로 흐름에서 빼야 사진이 화면 맨 위부터 꽉 찬다. */
 .topbar{
-  position:relative;
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:60;
   background:var(--cream);
   border-bottom:1.5px solid var(--rule);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .55s ease;
+}
+.topbar.is-shown{
+  opacity:1;
+  pointer-events:auto;
 }
 .topbar__inner{
   max-width:1320px;
@@ -287,23 +298,6 @@ em,.serif{
 .hero__mark-dots .dot.silver{background:#B5B3B0}
 .hero__mark-dots .dot.blue{background:#3866D6}
 .hero__mark-dots .dot.gold{background:#D7A839}
-/* 스크롤하면 hero에서 내려와 각 캐릭터 위로 이동하는 점 */
-.travel-dot{
-  position:fixed;
-  left:0; top:0;
-  width:8px; height:8px;
-  border-radius:999px;
-  transform:translate(-50%,-50%);
-  z-index:40;
-  pointer-events:none;
-  box-shadow:0 1px 4px rgba(0,0,0,0.18);
-  will-change:left,top,transform;
-}
-.travel-dot.black{background:#111111}
-.travel-dot.red{background:#D63A2F}
-.travel-dot.silver{background:#B5B3B0}
-.travel-dot.blue{background:#3866D6}
-.travel-dot.gold{background:#D7A839}
 .hero__tagline{
   margin-left:0;
 }
@@ -350,21 +344,23 @@ em,.serif{
 /* ===== Cast (5-Color band sized to photo) ===== */
 /* 핀(pin) 스테이지: 진입 시 화면에 고정되어 펼침→유지→해제 */
 /* 핀: 비건디 무대가 맨 위에 고정된 동안 영상을 재생할 스크롤 런웨이 */
-.cast-pin{position:relative; height:calc(100vh + 1400px)}
+/* 2200px은 사진 시퀀스 재생, 300px은 그 뒤 헤더가 나타나는 구간.
+   240프레임을 1000px에 넣었을 때는 프레임당 4.2px이라 휠 한 칸이 24프레임을 삼켰다.
+   2200px으로 늘려 프레임당 9.2px로 완만하게 만들었다. */
+.cast-pin{position:relative; height:calc(100vh + 2500px)}
 .cast-sticky{
   position:sticky;
   top:0;
   height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
   overflow:clip;
 }
 /* 첫 화면 하단의 아래로 스크롤 버튼 (통통 튀는 움직임) */
 .scrolldown{
   position:fixed;
-  left:50%;
-  bottom:26px;
+  /* 바닥은 다섯 이름 캡션 행이 쓴다. 버튼을 같은 높이에 두면 화면이 좁아질 때 사진 잘림이 커져
+     맨 오른쪽 이름과 부딪친다. 그래서 캡션 행 위쪽으로 올려 세로로 떼어 놓는다. */
+  right:clamp(20px, 3vw, 40px);
+  bottom:clamp(112px, 14vh, 150px);
   width:46px;
   height:46px;
   border-radius:999px;
@@ -390,16 +386,28 @@ em,.serif{
   transform:rotate(45deg);
 }
 @keyframes scrolldownBounce{
-  0%,100%{ transform:translate(-50%,0); }
-  50%{ transform:translate(-50%,9px); }
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(9px); }
 }
 @media (prefers-reduced-motion:reduce){
-  .scrolldown{animation:none; transform:translateX(-50%)}
+  .scrolldown{animation:none; transform:none}
 }
 .cast{
   position:relative;
   padding:0;
   width:100%;
+  height:100vh;   /* 사진이 첫 화면을 꽉 채운다 */
+}
+/* 이름이 얹히는 하단에 어두운 그라데이션을 깐다. 흰 정장·베이지 정장 위에서도 크림색 글자가 읽히게 하는 장치.
+   밴드가 아니라 .cast에 두는 이유는, 밴드의 filter:brightness가 이 막까지 밝혀버리기 때문이다. */
+.cast::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:min(24vh, 190px);
+  background:linear-gradient(to top, rgba(40,6,15,0.86), rgba(40,6,15,0.55) 38%, rgba(40,6,15,0));
+  pointer-events:none;
+  z-index:1;
 }
 .cast__eyebrow{
   max-width:1040px;
@@ -415,26 +423,36 @@ em,.serif{
 }
 /* 밴드: 영상 좌우 여백을 영상과 같은 비건디로 채운다. 밝기 필터로 영상+배경을 함께 연하게(이음선 유지) */
 .cast__band{
-  width:100%;
-  display:flex;
-  justify-content:center;
+  position:absolute;
+  inset:0;                    /* 화면 전체를 덮는다 */
   line-height:0;
   background-color:#751D26;
   filter:brightness(1.285);   /* 영상+배경을 함께 밝혀, 비건디 바가 rgb(140,46,54)로 보이게(이음선 유지) */
 }
 .cast__img{
-  width:100%;
-  max-width:1040px;
-  height:auto;
+  /* 크기와 위치는 JS layout()이 화면을 꽉 채우도록 계산해 넣는다(좌우 잘림 상한 포함) */
+  position:absolute;
   display:block;
+  /* 아직 안 그려진 캔버스가 번쩍이지 않게 0에서 시작하고, 첫 프레임이 그려지는 순간 JS가 1로 올린다 */
+  opacity:0;
+  transition:opacity .55s ease;
 }
 .cast__roles{
-  position:relative;
-  width:100%;
-  max-width:1040px;
-  margin:8px auto 0;
+  /* 사진 위에 겹쳐 놓는다. left·width는 JS가 사진의 실제 가로 범위에 맞춰 넣으므로
+     자식의 left:17% 같은 값이 인물 위치와 계속 일치한다. */
+  position:absolute;
+  /* 다섯 이름을 화면 바닥에 붙인 하나의 캡션 행으로 둔다. 인물 중간 높이에 떠 있으면
+     어느 인물의 이름인지도, 무슨 성격의 줄인지도 읽히지 않는다. 바닥은 그라데이션이 가장
+     진한 자리라 판독도 같이 좋아진다. */
+  bottom:clamp(26px, 3.4vh, 40px);
   height:70px;
+  margin:0;
+  max-width:none;
+  z-index:2;
 }
+/* 눈금은 이름이 사진 아래에 있을 때 인물과 이름을 잇는 선이었다. 사진 위로 올라온 뒤로는
+   인물 다리에 얹힌 의미 없는 선이 되므로 감춘다. */
+.cast__tick{display:none}
 .cast__role{
   position:absolute;
   top:0;
@@ -448,7 +466,7 @@ em,.serif{
 .cast__tick{
   width:1.5px;
   height:13px;
-  background:rgba(122,31,53,0.35);
+  background:rgba(242,216,106,0.5);   /* 사진 위에 얹히므로 크림 계열 */
   margin-bottom:3px;
 }
 .cast__role-head{
@@ -460,29 +478,33 @@ em,.serif{
   font-weight:600;
   letter-spacing:0.1em;
   text-transform:uppercase;
-  color:var(--burgundy);
+  color:var(--cream);                 /* 사진(비건디) 위에 얹히므로 크림 */
+  text-shadow:0 1px 6px rgba(0,0,0,0.35);
 }
 .cast__role-desc{
   font-family:var(--sans);
   font-size:12.5px;
-  color:var(--burgundy);
-  opacity:0.72;
+  color:var(--cream);
+  opacity:0.82;
   white-space:nowrap;
+  text-shadow:0 1px 6px rgba(0,0,0,0.35);
 }
 .cast__chip{
   width:9px;
   height:9px;
   border-radius:999px;
   display:inline-block;
-  box-shadow:0 0 0 1.5px rgba(122,31,53,0.18);
+  /* 사진 위에 얹히는 점은 테두리를 흰색으로 둘러 형태를 살린다. 검정은 어두운 배경에,
+     빨강은 비건디 배경에 묻히기 때문이다. 다섯 개를 같은 규칙으로 두어 한 벌로 보이게 한다. */
+  box-shadow:0 0 0 1.5px rgba(255,255,255,0.92);
 }
 .cast__chip.black{background:#111111}
 .cast__chip.red{background:#D63A2F}
 .cast__chip.silver{background:#B5B3B0}
 .cast__chip.blue{background:#3866D6}
 .cast__chip.gold{background:#D7A839}
-/* reveal: 아래 JS 스크롤 핸들러가 밴드 height·사진/라벨 opacity를 제어한다 */
-.cast__band{overflow:clip;align-items:flex-start}
+/* 사진이 화면보다 커서 잘리는 부분을 숨긴다(꽉 채우기) */
+.cast__band{overflow:clip}
 .cast__roles{overflow:visible}
 @media (max-width:680px){
   /* 모바일에서는 사진과 캐릭터 이름(라벨)을 숨긴다 */
@@ -1481,6 +1503,27 @@ body.is-loading .grid-section{animation-delay:.28s}
 <main>
   <!-- LIST VIEW -->
   <section class="list-view" id="listView">
+    <div class="cast-pin">
+     <div class="cast-sticky">
+    <section class="cast" aria-label="5-Color Harness 다섯 전문가">
+      <div class="cast__band">
+        <canvas class="cast__img" width="1280" height="720" aria-label="5-Color Harness의 다섯 전문가. 왼쪽부터 BLACK 업무 수행 팀장, RED 이성적 비평가, SILVER 분야 전문가, BLUE 공감해주는 이, GOLD 고객 · 독자."></canvas>
+      </div>
+      <div class="cast__roles" aria-hidden="true">
+        <span class="cast__role" style="left:17%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip black"></span>Black</span><span class="cast__role-desc">업무 수행 팀장</span></span>
+        <span class="cast__role" style="left:36%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip red"></span>Red</span><span class="cast__role-desc">이성적 비평가</span></span>
+        <span class="cast__role" style="left:49%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip silver"></span>Silver</span><span class="cast__role-desc">분야 전문가</span></span>
+        <span class="cast__role" style="left:69%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip blue"></span>Blue</span><span class="cast__role-desc">공감해주는 이</span></span>
+        <span class="cast__role" style="left:84%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip gold"></span>Gold</span><span class="cast__role-desc">고객 · 독자</span></span>
+      </div>
+    </section>
+     </div>
+    </div>
+
+    <button class="scrolldown" id="scrolldown" type="button" aria-label="아래로 스크롤">
+      <span class="scrolldown__chevron"></span>
+    </button>
+
     <div class="hero">
       <div class="hero__folio">
         <span class="hero__mark-dots" aria-hidden="true"><span class="dot black"></span><span class="dot red"></span><span class="dot silver"></span><span class="dot blue"></span><span class="dot gold"></span></span>
@@ -1493,27 +1536,6 @@ body.is-loading .grid-section{animation-delay:.28s}
           <p class="hero__sub hero__sub--mobile">작업 목적을 고르면 지침이 완성됩니다. 붙여넣으면 답의 격이 달라집니다.</p>
         </div>
       </div>
-    </div>
-
-    <button class="scrolldown" id="scrolldown" type="button" aria-label="아래로 스크롤">
-      <span class="scrolldown__chevron"></span>
-    </button>
-
-    <div class="cast-pin">
-     <div class="cast-sticky">
-    <section class="cast" aria-label="5-Color Harness 다섯 전문가">
-      <div class="cast__band">
-        <canvas class="cast__img" width="1038" height="584" aria-label="5-Color Harness의 다섯 전문가. 왼쪽부터 BLACK 업무 수행 팀장, RED 이성적 비평가, SILVER 분야 전문가, BLUE 공감해주는 이, GOLD 고객 · 독자."></canvas>
-      </div>
-      <div class="cast__roles" aria-hidden="true">
-        <span class="cast__role" style="left:17%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip black"></span>Black</span><span class="cast__role-desc">업무 수행 팀장</span></span>
-        <span class="cast__role" style="left:36%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip red"></span>Red</span><span class="cast__role-desc">이성적 비평가</span></span>
-        <span class="cast__role" style="left:49%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip silver"></span>Silver</span><span class="cast__role-desc">분야 전문가</span></span>
-        <span class="cast__role" style="left:69%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip blue"></span>Blue</span><span class="cast__role-desc">공감해주는 이</span></span>
-        <span class="cast__role" style="left:84%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip gold"></span>Gold</span><span class="cast__role-desc">고객 · 독자</span></span>
-      </div>
-    </section>
-     </div>
     </div>
 
     <div class="steps" aria-label="사용법 3단계">
@@ -2474,65 +2496,156 @@ window.addEventListener("load",()=>{
   setTimeout(()=>document.body.classList.remove("is-loading"),1700);
 });
 
-/* 첫 화면 하단 스크롤 버튼: 누르면 천천히 아래로 스크롤, 스크롤하면 사라진다 */
+/* 인트로 상태를 아래 두 IIFE(이동 컨트롤러 · 프레임 시퀀스)가 나눠 쓴다.
+   snap은 "건너뛰기" 신호다. 사용자가 재생 중에 계속 스크롤하면 프레임 보간을 즉시 끝내야 한다. */
+const CAST = { snap:false };
+
+/* 인트로 이동을 한 곳에서 관장한다. 하단 버튼과 키보드가 같은 함수, 같은 속도를 쓴다.
+   아래로 한 번 누르면(또는 버튼을 누르면) 인트로가 끝까지 등속으로 재생된다.
+   속도 곡선을 하나만 두는 것이 요점이다. 예전에는 구간마다 다른 ease를 써서
+   같은 조작인데도 체감 속도가 계속 달라졌다. */
 (function(){
-  const btn = document.getElementById("scrolldown");
-  if(!btn) return;
   const pin = document.querySelector(".cast-pin");
-  const video = document.querySelector(".cast__img");
-  const VIDEO_RUNWAY = 1000;   // 고정 후 영상이 끝까지 재생되는 스크롤(영상 IIFE와 동일)
-  const DOTS_RUNWAY = 400;     // 영상 뒤, 점이 이름 위치로 내려가는 스크롤(점 IIFE와 동일)
-  let anim = 0;
-  function clampN(v,a,b){ return v<a?a:(v>b?b:v); }
-  const easeOut = t => 1 - Math.pow(1 - t, 2);
-  const easeInOut = t => -(Math.cos(Math.PI*t)-1)/2;
-  // 구간별 속도로 스크롤: [{a,b,dur,ease}, ...]
-  function playSegments(segs){
-    cancelAnimationFrame(anim);
-    let acc = 0;
-    segs.forEach(function(s){ s.start = acc; acc += s.dur; });
-    const totalDur = acc;
-    const last = segs[segs.length-1];
-    const t0 = performance.now();
-    function frame(now){
-      const el = now - t0;
-      let yy;
-      if(el >= totalDur){ yy = last.b; }
-      else{
-        let s = segs[0];
-        for(let i=0;i<segs.length;i++){ if(el < segs[i].start + segs[i].dur){ s = segs[i]; break; } }
-        const k = clampN((el - s.start) / s.dur, 0, 1);
-        yy = s.a + (s.b - s.a) * s.ease(k);
-      }
-      window.scrollTo(0, Math.round(yy));
-      if(el < totalDur){ anim = requestAnimationFrame(frame); }
-    }
+  const btn = document.getElementById("scrolldown");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  // 아래 네 값은 프레임 IIFE·CAST 레이아웃 IIFE와 반드시 같아야 한다
+  const VIDEO_RUNWAY = 2200;
+  const NAMES_RUNWAY = 300;
+  const FRAME_COUNT  = 240;
+  const FRAME_RATE   = 48;     // 프레임 IIFE의 재생 속도(초당 프레임)
+  // 스크롤이 이 속도로 움직이면 프레임 목표가 정확히 초당 FRAME_RATE장씩 나아간다.
+  // 즉 스크롤 속도와 재생 속도가 어긋나지 않는다.
+  const INTRO_SPEED = FRAME_RATE * VIDEO_RUNWAY / FRAME_COUNT;   // = 440 px/초
+  const KEY_SPEED   = 1100;    // 인트로를 벗어난 구간에서 키로 이동하는 속도(px/초)
+
+  let anim = 0, from = 0, to = 0, t0 = 0, dur = 0, done = null;
+  function maxY(){ return document.documentElement.scrollHeight - window.innerHeight; }
+  function stop(){ if(anim){ cancelAnimationFrame(anim); anim = 0; } done = null; }
+  function frame(now){
+    const k = dur > 0 ? Math.min(1, (now - t0) / dur) : 1;
+    window.scrollTo(0, Math.round(from + (to - from) * k));   // 선형 = 등속
+    if(k < 1){ anim = requestAnimationFrame(frame); return; }
+    anim = 0;
+    const next = done; done = null;      // 이어지는 구간이 있으면 여기서 넘긴다
+    if(next) next();
+  }
+  // 목표까지 등속으로 옮긴다. 속도가 고정이므로 걸리는 시간은 거리에 비례한다.
+  function glideTo(y, speed, onDone){
+    const next = Math.max(0, Math.min(Math.round(y), maxY()));
+    if(next === window.scrollY){ if(onDone) onDone(); return false; }
+    if(reduce.matches){ stop(); window.scrollTo(0, next); if(onDone) onDone(); return true; }
+    stop();
+    from = window.scrollY; to = next; done = onDone || null;
+    dur = Math.max(120, Math.abs(to - from) / speed * 1000);
+    t0 = performance.now();
     anim = requestAnimationFrame(frame);
+    return true;
   }
-  btn.addEventListener("click", function(){
-    if(!pin){ window.scrollTo({top: window.scrollY + Math.round(window.innerHeight*0.85), behavior:"smooth"}); return; }
-    const pinTop = pin.getBoundingClientRect().top + window.scrollY;
-    const y0 = window.scrollY;
-    const durSec = (video && video.duration) ? video.duration : 10;
-    const segs = [];
-    // (1) 접근: 빠르게 비건디를 맨 위로 올림
-    if(y0 < pinTop - 4){ segs.push({a:y0, b:pinTop, dur:700, ease:easeOut}); }
-    // (2) 영상 재생: 실제 길이만큼 등속으로(자연스럽게)
-    segs.push({a:Math.max(y0,pinTop), b:pinTop+VIDEO_RUNWAY, dur:durSec*1000, ease:t=>t});
-    // (3) 점이 이름으로 내려가 이름이 나타남
-    segs.push({a:pinTop+VIDEO_RUNWAY, b:pinTop+VIDEO_RUNWAY+DOTS_RUNWAY, dur:1900, ease:easeInOut});
-    playSegments(segs);
+  function pinTop(){ return pin ? Math.round(pin.getBoundingClientRect().top + window.scrollY) : 0; }
+  function introEnd(){ return pinTop() + VIDEO_RUNWAY + NAMES_RUNWAY; }
+  // 모바일에서는 .cast-pin이 display:none이라 offsetHeight가 0이다. 그때는 인트로가 없으므로
+  // 스크롤을 절대 가로채지 않는다(터치 스크롤을 망치지 않기 위한 안전장치).
+  function inIntro(){ return pin && pin.offsetHeight > 0 && window.scrollY < introEnd(); }
+  /* 시퀀스가 끝난 뒤 멈출 자리: 아래 노란 섹션(hero)의 윗변이 상단 헤더 바로 밑에 붙는 지점.
+     헤더가 fixed라 그 높이만큼 당겨야 가려지지 않는다. */
+  function settleTarget(){
+    const hero = document.querySelector(".hero");
+    if(!hero) return introEnd();
+    const topbar = document.querySelector(".topbar");
+    const h = topbar ? topbar.offsetHeight : 0;
+    return Math.round(hero.getBoundingClientRect().top + window.scrollY - h);
+  }
+  /* 한 번 누르면 끝까지. 두 구간을 이어 붙인다.
+     (1) 시퀀스 구간은 재생 속도와 맞물린 INTRO_SPEED로 등속 재생
+     (2) 재생이 끝나면 이어서 노란 섹션이 헤더에 붙는 자리까지 내려간다
+     구간 안에서는 속도가 일정하고, 속도가 바뀌는 시점은 이미 재생이 끝난 뒤라 연출을 흐트리지 않는다. */
+  function playIntro(){
+    playAt = performance.now(); extra = 0; curDir = 1;
+    const seqEnd = pinTop() + VIDEO_RUNWAY;
+    if(window.scrollY < seqEnd - 1){
+      return glideTo(seqEnd, INTRO_SPEED, function(){ glideTo(settleTarget(), KEY_SPEED); });
+    }
+    return glideTo(settleTarget(), KEY_SPEED);
+  }
+  function rewindIntro(){ playAt = performance.now(); extra = 0; curDir = -1; return glideTo(pinTop(), INTRO_SPEED); }
+
+  /* 재생 중에 사용자가 같은 방향으로 계속 굴리면(또는 다시 누르면) 재생을 끊고 그 방향 끝까지 빠르게 간다.
+     아래로도, 위로도 같게 동작한다.
+     휠 한 번의 제스처는 관성 이벤트를 수십 개 남기므로, GRACE_MS 안에 들어온 것은 같은 조작으로 보고 무시한다.
+     그 뒤로 SKIP_DELTA만큼 더 굴리면 건너뛰기로 판정한다. */
+  const GRACE_MS   = 600;
+  const SKIP_DELTA = 150;
+  const SKIP_SPEED = 2600;   // 건너뛸 때 속도(px/초)
+  let playAt = 0, extra = 0, curDir = 0;
+  function playing(){ return anim !== 0; }
+  // dir이 1이면 정착 지점까지, -1이면 인트로 처음까지 빠르게 간다
+  function skipTo(dir){
+    CAST.snap = true;        // 프레임 보간도 즉시 목표에 맞춰 끝낸다(재생 정지)
+    stop();
+    extra = 0; curDir = dir;
+    return glideTo(dir > 0 ? settleTarget() : pinTop(), SKIP_SPEED);
+  }
+  /* 굴리거나 누른 입력 하나를 처리한다. 휠과 키가 같은 판정을 쓰도록 한 곳에 모았다.
+     amount는 이번 입력의 크기(휠은 deltaY, 키는 한 번을 SKIP_DELTA로 본다). */
+  function advance(dir, amount){
+    if(playing()){
+      if(dir !== curDir){                          // 방향을 바꿨으면 건너뛰기가 아니라 반대로 재생
+        return dir > 0 ? playIntro() : rewindIntro();
+      }
+      if(performance.now() - playAt < GRACE_MS) return false;   // 같은 제스처의 관성 이벤트
+      extra += Math.abs(amount);
+      if(extra >= SKIP_DELTA) return skipTo(dir);   // 계속 굴렸다 → 끊고 빠르게
+      return false;
+    }
+    return dir > 0 ? playIntro() : rewindIntro();
+  }
+
+  if(btn){
+    btn.addEventListener("click", function(){
+      if(!playIntro()) glideTo(window.scrollY + window.innerHeight * 0.86, KEY_SPEED);
+    });
+    function toggle(){
+      const hide = window.scrollY > 80;
+      btn.style.opacity = hide ? "0" : "1";
+      btn.style.pointerEvents = hide ? "none" : "auto";
+    }
+    toggle();
+    window.addEventListener("scroll", toggle, {passive:true});
+  }
+
+  function handsOff(el){
+    if(!el || !el.tagName) return false;   // window·document처럼 요소가 아닌 대상은 그냥 통과시킨다
+    const t = el.tagName;
+    return t === "INPUT" || t === "TEXTAREA" || t === "SELECT" || t === "BUTTON" || t === "A" ||
+           el.isContentEditable === true ||
+           (typeof el.getAttribute === "function" && el.getAttribute("role") === "button");
+  }
+  window.addEventListener("keydown", function(e){
+    if(e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    if(handsOff(e.target)) return;
+    const down = e.code === "ArrowDown" || e.code === "PageDown" || (e.code === "Space" && !e.shiftKey);
+    const up   = e.code === "ArrowUp"   || e.code === "PageUp"   || (e.code === "Space" &&  e.shiftKey);
+    if(!down && !up) return;
+    e.preventDefault();
+    // 인트로 안에서는 한 번 누르면 끝(또는 처음)까지 간다. 밖에서는 한 화면씩 움직인다.
+    // 한 번 누르면 끝까지. 재생 중에 같은 방향으로 다시 누르면 끊고 빠르게 간다(휠과 같은 판정).
+    if(inIntro()){ advance(down ? 1 : -1, SKIP_DELTA); return; }
+    if(up && pin && window.scrollY <= introEnd() + window.innerHeight){ rewindIntro(); return; }
+    const stepY = window.innerHeight * (e.code === "ArrowDown" || e.code === "ArrowUp" ? 0.34 : 0.86);
+    glideTo(window.scrollY + (down ? stepY : -stepY), KEY_SPEED);
   });
-  // 사용자가 직접 스크롤(휠/터치)하면 자동 스크롤 중단
-  window.addEventListener("wheel", function(){ cancelAnimationFrame(anim); }, {passive:true});
-  window.addEventListener("touchstart", function(){ cancelAnimationFrame(anim); }, {passive:true});
-  function toggle(){
-    const hide = window.scrollY > 80;
-    btn.style.opacity = hide ? "0" : "1";
-    btn.style.pointerEvents = hide ? "none" : "auto";
-  }
-  toggle();
-  window.addEventListener("scroll", toggle, {passive:true});
+  /* 휠도 키와 같게 만든다. 인트로 안에서 아래로 굴리면 끝까지 재생하고, 위로 굴리면 처음으로 되돌린다.
+     기본 스크롤을 막아야 하므로 passive를 끈다. 인트로를 벗어나면 관여하지 않고,
+     진행 중인 자동 이동만 멈춰 사용자에게 조작권을 넘긴다. */
+  window.addEventListener("wheel", function(e){
+    if(e.ctrlKey) return;                 // 확대·축소 제스처는 건드리지 않는다
+    if(!inIntro()){ stop(); return; }
+    if(e.deltaY === 0) return;
+    e.preventDefault();
+    advance(e.deltaY > 0 ? 1 : -1, e.deltaY);
+  }, {passive:false});
+  // 터치는 가로채지 않는다(모바일은 인트로가 없다). 진행 중인 자동 이동만 멈춘다.
+  window.addEventListener("touchstart", stop, {passive:true});
 })();
 
 /* CAST 시퀀스(이미지 시퀀스 스크럽): (1)스크롤하면 첫 프레임이 나타나고 비건디가 위로 → (2)맨 위에 닿으면 고정
@@ -2543,11 +2656,43 @@ window.addEventListener("load",()=>{
   if(!pin || !canvas || !canvas.getContext) return;
   const band = document.querySelector(".cast__band");
   const clamp = (v,a,b)=> v<a?a:(v>b?b:v);
-  const VIDEO_RUNWAY = 1000;   // 고정 후 이만큼 스크롤하면 마지막 프레임까지 (이후는 점→이름 구간)
-  const FRAME_COUNT = 120;     // 추출한 프레임 수(12fps × 10초)
+  const VIDEO_RUNWAY = 2200;   // 고정 후 이만큼 스크롤하면 마지막 프레임까지 (이후는 헤더 등장 구간)
+  const FRAME_COUNT = 240;     // 추출한 프레임 수(24fps × 10초)
   const ctx = canvas.getContext("2d", {willReadFrequently:true});
   const frames = new Array(FRAME_COUNT);
   let lastIdx = -1;
+  // 스크롤은 "목표 프레임"만 정하고, 화면에 그리는 프레임은 그 목표를 향해 "등속"으로 나아간다.
+  // 지수 감쇠(처음 빠르고 끝에서 기어가는 방식)를 쓰면 스크롤 양에 따라 체감 속도가 계속 달라진다.
+  // 초당 진행 프레임 수를 고정하면, 얼마를 굴렸든 재생 속도가 항상 같다.
+  const FRAME_RATE = 48;   // 초당 진행 프레임 수(원본 24fps의 2배 속도). 이 값 하나가 재생 속도다.
+  let targetIdx = 0;       // 스크롤이 가리키는 프레임(소수)
+  let curIdx = 0;          // 지금 그려지고 있는 프레임(소수)
+  let raf = null, lastT = 0;
+  function tick(t){
+    const dt = lastT ? Math.min(t - lastT, 50) : 16.7;   // 탭 복귀 등으로 크게 벌어지면 튀는 것을 막는다
+    lastT = t;
+    const d = targetIdx - curIdx;
+    // 건너뛰기 신호가 오면 보간을 접고 목표 프레임으로 즉시 맞춘다(재생 정지)
+    if(CAST.snap){
+      CAST.snap = false;
+      curIdx = targetIdx;
+      draw(Math.round(curIdx));
+      raf = null; lastT = 0;
+      return;
+    }
+    // 주사율(60Hz·120Hz)에 상관없이 같은 속도가 되도록, 나아갈 양을 경과 시간으로 계산한다
+    const step = FRAME_RATE * dt / 1000;
+    if(Math.abs(d) <= step){           // 목표에 닿았으면 정확히 맞추고 루프를 쉰다
+      curIdx = targetIdx;
+      draw(Math.round(curIdx));
+      raf = null; lastT = 0;
+      return;
+    }
+    curIdx += (d > 0 ? step : -step);  // 방향만 바뀌고 크기는 항상 같다(등속)
+    draw(Math.round(curIdx));
+    raf = requestAnimationFrame(tick);
+  }
+  function kick(){ if(raf === null){ lastT = 0; raf = requestAnimationFrame(tick); } }
   // 프레임 프리로드
   for(let i=0;i<FRAME_COUNT;i++){
     const im = new Image();
@@ -2577,7 +2722,9 @@ window.addEventListener("load",()=>{
       if(j<0) return;
       idx = j;
     }
+    if(idx === lastIdx) return;   // 같은 프레임이면 캔버스와 밴드색 갱신을 건너뛴다
     ctx.drawImage(frames[idx], 0, 0, canvas.width, canvas.height);
+    if(lastIdx === -1) canvas.style.opacity = "1";   // 첫 프레임이 그려진 순간 한 번만 올린다
     lastIdx = idx;
     syncBandBg();
   }
@@ -2585,109 +2732,70 @@ window.addEventListener("load",()=>{
     const vh = window.innerHeight;
     const rect = pin.getBoundingClientRect();
     const total = pin.offsetHeight - vh;
-    const y = window.scrollY;
-    // (1) 접근 중: 첫 프레임(이미지)이 서서히 나타난다
-    canvas.style.opacity = clamp(y / 360, 0, 1).toFixed(3);
+    // (1) 사진은 첫 화면부터 계속 보인다(스크롤로 페이드하지 않는다)
     // (2)(3) 고정되면 스크롤한 만큼 프레임 진행
     const pinnedScroll = (rect.top <= 0 && total > 0) ? clamp(-rect.top, 0, total) : 0;
     const p = clamp(pinnedScroll / VIDEO_RUNWAY, 0, 1);
-    const idx = Math.round(p * (FRAME_COUNT - 1));
-    if(idx !== lastIdx){ draw(idx); }
+    targetIdx = p * (FRAME_COUNT - 1);   // 목표만 갱신하고, 실제 렌더는 tick()이 이어서 따라간다
+    kick();
   }
   update();
   window.addEventListener("scroll", update, {passive:true});
   window.addEventListener("resize", update, {passive:true});
 })();
 
-/* CAST 5색 점: 스크롤하면 hero에서 내려와 각 캐릭터 위로 이동한다 */
+/* CAST 레이아웃: 사진을 첫 화면에 꽉 채우고, 이름을 각 인물 바로 아래에 붙여 놓는다.
+   시퀀스가 끝나면 이름이 떠오르고, 그때 상단 헤더도 함께 나타난다. */
 (function(){
-  const heroDots = Array.prototype.slice.call(document.querySelectorAll(".hero__mark-dots .dot"));
-  const roles = Array.prototype.slice.call(document.querySelectorAll(".cast__role"));
-  const band = document.querySelector(".cast__band");
   const pin = document.querySelector(".cast-pin");
-  if(heroDots.length !== 5 || roles.length !== 5 || !band || !pin) return;
-  const chips = roles.map(function(r){ return r.querySelector(".cast__chip"); });
+  const band = document.querySelector(".cast__band");
+  const canvas = document.querySelector(".cast__img");
+  const rolesWrap = document.querySelector(".cast__roles");
+  const roles = Array.prototype.slice.call(document.querySelectorAll(".cast__role"));
+  const topbar = document.querySelector(".topbar");
+  if(!pin || !band || !canvas || !rolesWrap || roles.length !== 5) return;
   const clamp = (v,a,b)=> v<a?a:(v>b?b:v);
-  const ease = t=> 1 - Math.pow(1 - t, 3); // easeOutCubic
-  const RANGE = 420;          // 접근: 이만큼 스크롤하면 점이 캐릭터 위에 도착
-  const HEAD = 14;            // 사진 상단에서 머리 위까지의 보정
-  const VIDEO_RUNWAY = 1000;  // 고정 후 영상 재생에 쓰는 스크롤(영상 IIFE와 동일)
-  const DOTS_RUNWAY = 400;    // 영상 재생 뒤, 점이 이름 위치로 내려가는 스크롤
-  const colors = ["black","red","silver","blue","gold"];
-  // 5색 점을 뺀 hero 글자들: 스크롤하면 위→아래 순으로 차례차례 사라진다
-  const tagline = document.querySelector(".hero__tagline");
-  const title = document.querySelector(".hero__title");
-  const subs = Array.prototype.slice.call(document.querySelectorAll(".hero__sub"));
-  const faders = [
-    {el: tagline, start: 10,  len: 70},
-    {el: title,   start: 55,  len: 90},
-    {el: subs,    start: 110, len: 90}
-  ];
-  const trav = heroDots.map(function(d,i){
-    const s = document.createElement("span");
-    s.className = "travel-dot " + colors[i];
-    document.body.appendChild(s);
-    return s;
-  });
-  function reset(){
-    // 원래 hero 점/글자를 그대로 (정렬 보장), 이동용 점 숨김
-    heroDots.forEach(function(d){ d.style.visibility = ""; });
-    trav.forEach(function(s){ s.style.display = "none"; });
-    faders.forEach(function(f){ (Array.isArray(f.el)?f.el:[f.el]).forEach(function(e){ if(e) e.style.opacity=""; }); });
-  }
-  function update(){
-    const sy = window.scrollY;
-    // 모바일(사진 없음) 또는 맨 위에서는 효과를 끄고 원래 모습 유지
-    if(window.innerWidth <= 680 || !band.offsetParent || sy <= 1){
-      reset();
-      return;
+  const AR = 1280 / 720;       // 사진 비율(원본 프레임 해상도)
+  const MAX_CROP = 0.08;       // 세로를 채우려 확대할 때 좌우로 잘라낼 수 있는 최대 비율
+  const VIDEO_RUNWAY = 2200;   // 시퀀스 재생에 쓰는 스크롤(프레임 IIFE와 동일)
+  const NAMES_RUNWAY = 300;    // 재생 뒤 헤더가 나타나는 스크롤
+
+  /* 사진을 화면에 꽉 채운다. 가로를 맞춘 뒤 세로가 남으면 확대해 채우되,
+     좌우 잘림이 MAX_CROP을 넘으면 거기서 멈춘다(다섯 인물이 잘려나가지 않게 하는 상한).
+     그때 남는 위아래는 사진과 같은 비건디 배경이 이어받아 경계가 보이지 않는다. */
+  function layout(){
+    const vw = band.clientWidth, vh = band.clientHeight;
+    if(!vw || !vh) return;
+    let w = vw, h = w / AR;
+    if(h < vh){
+      const k = Math.min(vh / h, 1 + 2 * MAX_CROP);
+      w *= k; h *= k;
     }
-    heroDots.forEach(function(d){ d.style.visibility = "hidden"; });
-    trav.forEach(function(s){ s.style.display = ""; });
-    // 글자 순차 페이드아웃 (태그라인 → 제목 → 부제)
-    faders.forEach(function(f){
-      const o = (1 - clamp((sy - f.start) / f.len, 0, 1)).toFixed(3);
-      (Array.isArray(f.el)?f.el:[f.el]).forEach(function(e){ if(e) e.style.opacity = o; });
-    });
-    // 접근(ta): hero → 캐릭터 위 / 영상 재생 후(tc): 캐릭터 위 → 이름(칩) 위치
-    const ta = ease(clamp(sy / RANGE, 0, 1));
+    const left = (vw - w) / 2, top = (vh - h) / 2;
+    canvas.style.width  = w + "px";
+    canvas.style.height = h + "px";
+    canvas.style.left   = left + "px";
+    canvas.style.top    = top + "px";
+    // 이름의 left:17% 같은 값이 인물 위치와 맞도록, 이름 묶음을 사진과 같은 가로 범위에 올린다
+    rolesWrap.style.left  = left + "px";
+    rolesWrap.style.width = w + "px";
+  }
+
+  function update(){
     const rect = pin.getBoundingClientRect();
     const total = pin.offsetHeight - window.innerHeight;
     const pinnedScroll = (rect.top <= 0 && total > 0) ? clamp(-rect.top, 0, total) : 0;
-    const tc = ease(clamp((pinnedScroll - VIDEO_RUNWAY) / DOTS_RUNWAY, 0, 1));
-    const bandTop = band.getBoundingClientRect().top;
-    for(let i=0;i<5;i++){
-      const hr = heroDots[i].getBoundingClientRect();
-      const sx = hr.left + hr.width/2, sy0 = hr.top + hr.height/2;
-      const rr = roles[i].getBoundingClientRect();
-      const aboveX = rr.left + rr.width/2, aboveY = bandTop + HEAD;
-      const cr = chips[i].getBoundingClientRect();
-      const chipX = cr.left + cr.width/2, chipY = cr.top + cr.height/2;
-      let x, y, scale;
-      if(tc <= 0){
-        // 접근 + 영상 재생 중: hero → 캐릭터 위에서 대기
-        x = sx + (aboveX - sx) * ta;
-        y = sy0 + (aboveY - sy0) * ta;
-        scale = 1 + 0.7 * ta;
-      }else{
-        // 영상 끝난 뒤: 캐릭터 위 → 이름(칩) 위치로 내려가며 칩 크기로 줄어든다
-        x = aboveX + (chipX - aboveX) * tc;
-        y = aboveY + (chipY - aboveY) * tc;
-        scale = 1.7 + (1 - 1.7) * tc;
-      }
-      trav[i].style.left = x + "px";
-      trav[i].style.top  = y + "px";
-      trav[i].style.transform = "translate(-50%,-50%) scale(" + scale.toFixed(3) + ")";
-    }
-    // 이름: 다섯 개 점이 거의 다 도착했을 때(tc≈0.95~1)에야 나타난다
-    const nameOp = clamp((tc - 0.95) / 0.05, 0, 1).toFixed(3);
-    roles.forEach(function(el){ el.style.opacity = nameOp; });
+    const t = clamp((pinnedScroll - VIDEO_RUNWAY) / NAMES_RUNWAY, 0, 1);
+    // 헤더는 인트로가 끝난 뒤에 나타난다(다시 위로 올라가면 함께 사라진다)
+    if(topbar) topbar.classList.toggle("is-shown", t >= 1);
   }
-  roles.forEach(function(el){ el.style.opacity = "0"; });   // 이름은 점이 내려올 때 나타난다
-  update();
+
+  // 이름은 첫 화면부터 그냥 보인다(등장 연출 없음)
+  layout(); update();
   window.addEventListener("scroll", update, {passive:true});
-  window.addEventListener("resize", update, {passive:true});
+  window.addEventListener("resize", function(){ layout(); update(); }, {passive:true});
 })();
+
 
 </script>
 </body>
