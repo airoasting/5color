@@ -115,22 +115,16 @@ em,.serif{
 }
 
 /* ===== Topbar ===== */
-/* 상단 헤더: 첫 화면 사진을 지나갈 때까지 숨어 있다가 나타난다.
-   fixed로 흐름에서 빼야 사진이 화면 맨 위부터 꽉 찬다. */
+/* 상단 헤더는 고정하지 않는다. 인트로(사진·프롬프트) 두 화면이 끝나는 자리에 놓여 있다가,
+   내용과 함께 위로 스크롤돼 올라간다. 화면에 붙어 따라다니지 않는다.
+   흐름에 놓기 위해 인트로를 list-view 밖으로 빼고 그 사이에 두었다(마크업 순서 참고). */
 .topbar{
-  position:fixed;
-  top:0; left:0; right:0;
+  position:relative;
   z-index:60;
   background:var(--cream);
   border-bottom:1.5px solid var(--rule);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .55s ease;
 }
-.topbar.is-shown{
-  opacity:1;
-  pointer-events:auto;
-}
+/* 상세 화면으로 들어가면 인트로가 접히므로 헤더가 곧 페이지 맨 위가 된다 */
 .topbar__inner{
   max-width:1320px;
   margin:0 auto;
@@ -293,10 +287,36 @@ em,.serif{
 /* 첫 화면은 다섯 인물 사진 한 장이다. 스크롤하면 그대로 위로 빠지고 아래 다크 프롬프트 섹션이 이어받는다.
    예전에는 여기에 240장짜리 사진 시퀀스와 2500px짜리 스크롤 활주로가 있었다. 스크롤 비용을 그만큼
    쓰고 남기는 정보가 "다섯 명이 서 있다"뿐이라, 정지 사진 한 장으로 줄이고 그 구간을 프롬프트 실물에 넘겼다. */
-/* 첫 화면은 고정하지 않는다. 그냥 위로 스크롤돼 올라간다.
-   높이는 JS가 "표제 높이 + 사진 높이"로 잡는다(최소 한 화면). 그래서 처음에는 사진 아래쪽이
-   화면 밖으로 잘려 있고, 스크롤을 내리면 그 잘린 부분이 자연스럽게 드러난다. 별도의 연출 코드가 없다. */
+/* 첫 화면의 세로 구성. 전부 문서 흐름이고, 고정은 sticky 한 줄이 전부다.
+     [표제 블록]  제 높이만큼 자리를 차지하고 그냥 위로 스크롤돼 올라간다
+     [사진 블록]  100vh. sticky라 윗변이 화면 맨 위에 닿는 순간 거기서 멈춘다.
+                  사진은 이 블록의 바닥에 붙어 있어서, 올라오는 동안 잘려 있던 아래쪽이 드러난다
+     [고정 구간]  100vh. 사진이 멈춰 있는 동안 아래 프롬프트 화면이 위를 덮으며 올라오는 자리
+   .demo의 margin-top(-100vh)이 프롬프트 화면을 정확히 이 구간만큼 끌어올린다. 그 결과
+   사진의 고정이 풀리는 순간과 프롬프트 화면이 화면을 다 덮는 순간이 같은 지점에서 만난다. */
 .cast-pin{position:relative; z-index:0}
+/* 표제 블록은 사진 밴드 밖에 있어서 그대로 두면 페이지의 크림색이 비친다. 핀 전체에 사진과 같은
+   배경을 깔아 표제가 사진의 연장선 위에 놓이게 한다. 배경 그림은 JS가 사진 맨 윗줄에서 떠서
+   --cast-strip에 넣고, 밝기 필터는 밴드에 걸린 값과 같아야 색이 맞는다. */
+.cast-pin::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background-color:var(--cast-solid, #751D26);
+  background-image:var(--cast-strip, none);
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+  filter:brightness(1.285);
+  pointer-events:none;
+}
+.cast-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:clip;   /* 올라오는 사진이 위아래 섹션을 침범하지 않게 잘라낸다 */
+}
+.cast-hold{height:100vh}
 .scrolldown{
   position:fixed;
   /* 바닥은 다섯 이름 캡션 행이 쓴다. 버튼을 같은 높이에 두면 화면이 좁아질 때 사진 잘림이 커져
@@ -338,25 +358,22 @@ em,.serif{
   position:relative;
   padding:0;
   width:100%;
-  min-height:100vh;   /* 높이는 JS layout()이 표제+사진에 맞춰 넣는다 */
+  height:100vh;   /* 사진이 첫 화면을 꽉 채운다 */
 }
 /* 사진 위에 얹는 표제. 첫 화면만 보고도 이게 무슨 사이트인지 알 수 있어야 한다.
    예전에는 사이트 이름도 설명도 두 화면 아래에 있어서, 처음 온 사람에게 첫 화면은
    "정장 입은 사람 다섯"이 전부였다. 사진은 그대로 두고 글자만 위로 올린다. */
 .cast__over{
-  /* 화면을 덮지 않고 위쪽에서 제 높이만큼만 자리를 차지한다. JS layout()이 이 높이를 읽어
-     사진을 그 아래로 내리므로, 글자가 인물 얼굴 위에 얹히는 일이 없다. */
-  position:absolute;
-  left:0; right:0; top:0;
+  /* 사진 블록 위에 놓인 평범한 블록. 고정하지 않으므로 스크롤하면 그대로 위로 올라간다.
+     사진이 이 블록 아래에서 시작하니, 글자가 인물 얼굴 위에 얹히는 일도 없다. */
+  position:relative;
   z-index:3;
   display:flex;
   flex-direction:column;
   align-items:flex-start;
   gap:clamp(12px,1.6vh,20px);
   padding:clamp(20px,3.2vh,36px) clamp(24px,4vw,64px) clamp(16px,2.4vh,30px);
-  pointer-events:none;   /* 빈 여백이 아래 버튼·링크를 막지 않게 한다. 글자에만 다시 켠다. */
 }
-.cast__over > *{pointer-events:auto}
 .cast__brand{
   display:inline-flex;
   align-items:center;
@@ -523,12 +540,26 @@ em,.serif{
 /* 사진이 화면보다 커서 잘리는 부분을 숨긴다(꽉 채우기) */
 .cast__band{overflow:clip}
 .cast__roles{overflow:visible}
+/* 좁은 화면에서는 이름 사이가 좁아져 설명끼리 닿는다. 글자를 한 단계 줄여 간격을 확보한다. */
+@media (max-width:900px){
+  .cast__role-desc{font-size:11.5px}
+}
 @media (max-width:680px){
-  /* 모바일에서는 사진과 캐릭터 이름(라벨)을 숨긴다 */
-  .cast-pin{display:none}
-  /* 사진이 없으면 프롬프트 섹션이 곧 첫 화면이다. 내려갈 곳을 가리키는 버튼도, 사진 위로 끌어올리는 여백도 뺀다. */
+  /* 모바일에서도 사진은 보여준다. 다만 폭이 좁아 스크롤 연출은 접는다.
+     핀 런웨이도, 사진을 고정하는 sticky도, 다음 화면이 덮어 올라오는 겹침도 쓰지 않는다.
+     섹션 높이는 JS가 "표제 + 사진"으로 딱 맞춰 넣어, 빈 비건디가 길게 남지 않게 한다. */
+  .cast-sticky{position:static; height:auto; overflow:visible}
+  .cast-hold{display:none}
+  .cast{height:auto}
+  /* 다섯 이름은 375px 폭에서 서로 겹친다. 이름줄과 그 판독을 돕던 바닥 그라데이션을 함께 접는다. */
+  .cast__roles{display:none}
+  .cast::after{display:none}
+  /* 모바일은 상단 헤더가 화면에 고정돼 같은 이름을 이미 달고 있다. 사진 위 브랜드 줄은 접는다. */
+  .cast__brand{display:none}
+  /* 화면이 짧아 버튼이 사진 위에 얹힌다. 내려갈 곳도 바로 아래라 굳이 가리키지 않는다.
+     (사진 위로 끌어올리던 음수 여백은 아래 .demo 규칙 뒤에서 되돌린다. 여기서 적으면 .demo 정의보다
+     먼저 나와 덮이지 않는다.) */
   .scrolldown{display:none}
-  .demo{min-height:0}
 }
 
 /* ===== Demo (다크 배경 위의 프롬프트 실물) ===== */
@@ -536,8 +567,11 @@ em,.serif{
    프롬프트 열 줄을 그대로 보여준다. 검정 대신 비건디를 끝까지 어둡게 내린 색을 쓴다.
    순수 검정은 위(사진)·아래(크림) 어느 쪽과도 같은 팔레트로 읽히지 않는다. */
 .demo{
+  /* 고정된 첫 화면 위로 덮으며 올라온다. margin-top이 핀의 마지막 100vh만큼 이 섹션을 끌어올리고,
+     z-index가 사진보다 위에 놓는다. 한 화면을 온전히 덮어야 하므로 min-height도 화면 높이로 잡는다. */
   position:relative;
   z-index:5;
+  margin-top:-100vh;
   min-height:100vh;
   display:flex;
   align-items:center;
@@ -672,7 +706,8 @@ em,.serif{
   .demo__code.is-done .demo__cursor{animation:none}
 }
 @media (max-width:680px){
-  .demo{padding:64px 18px 68px;display:block}
+  /* 사진이 없으니 사진 위로 끌어올릴 것도, 한 화면을 덮을 이유도 없다 */
+  .demo{padding:64px 18px 68px;display:block;margin-top:0;min-height:0}
   .demo__code{line-height:1.95}
   .demo__bar-name{display:none}
 }
@@ -1075,7 +1110,8 @@ em,.serif{
   min-height:100vh;
 }
 .detail.is-active{display:block}
-.list-view.is-hidden{display:none}
+.list-view.is-hidden,
+.intro.is-hidden{display:none}
 .detail__inner{
   max-width:1320px;
   margin:0 auto;
@@ -1638,35 +1674,11 @@ body.is-loading .grid-section{animation-delay:.28s}
 </head>
 <body class="is-loading">
 
-<header class="topbar">
-  <div class="topbar__inner">
-    <a class="brand" href="#" id="brandHome" aria-label="홈으로">
-      <img class="brand__mark" src="assets/logo/logo1-transparent.png" alt="AI Roasting" />
-      <span class="brand__mobile">AI ROASTING</span>
-      <span class="brand__sep">&amp;</span>
-      <span class="brand__name" id="brandLabel">5-Color Harness</span>
-    </a>
-    <div class="topbar__actions">
-      <span id="themeToggle" hidden aria-hidden="true"></span>
-      <a class="icon-btn icon-btn--github" href="https://github.com/airoasting/5color" target="_blank" rel="noopener noreferrer" aria-label="GitHub 저장소 (새 탭)">
-        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
-      </a>
-      <button type="button" class="icon-btn icon-btn--menu" id="chipsToggle" aria-label="카테고리 메뉴" aria-expanded="false" aria-controls="chips">
-        <span class="hamburger" aria-hidden="true"><span></span><span></span><span></span></span>
-      </button>
-    </div>
-  </div>
-</header>
-
 <main>
-  <!-- LIST VIEW -->
-  <section class="list-view" id="listView">
+  <!-- INTRO: 사진 화면과 프롬프트 화면. 상세 화면으로 들어가면 아래 list-view와 함께 접힌다. -->
+  <section class="intro" id="intro">
     <div class="cast-pin">
-    <section class="cast" aria-label="5-Color Harness 다섯 전문가">
-      <div class="cast__band">
-        <img class="cast__img" src="assets/images/5color-seq/f_001.png" width="1280" height="720" fetchpriority="high" alt="5-Color Harness의 다섯 전문가. 왼쪽부터 BLACK 초안을 쓴다, RED 논리를 따진다, SILVER 기준으로 잰다, BLUE 읽는 마음을 본다, GOLD 실제로 읽는다." />
-      </div>
-      <div class="cast__over">
+     <div class="cast__over">
         <span class="cast__brand">
           <img src="assets/logo/logo1-transparent.png" alt="" aria-hidden="true" />
           <span class="cast__brand-word">AI ROASTING</span>
@@ -1676,14 +1688,22 @@ body.is-loading .grid-section{animation-delay:.28s}
         <h1 class="cast__title">하나의 프로젝트에,<br/><em>다섯 명의 전문가.</em></h1>
         <p class="cast__sub">한 명이 초안을 쓰고, 네 명이 검증합니다. 프로젝트 지침란에 한 번만 붙여넣으면 됩니다.</p>
       </div>
+     <div class="cast-sticky">
+    <section class="cast" aria-label="5-Color Harness 다섯 전문가">
+      <div class="cast__band">
+        <img class="cast__img" src="assets/images/5color-seq/f_001.png" width="1280" height="720" fetchpriority="high" alt="5-Color Harness의 다섯 전문가. 왼쪽부터 BLACK 초안을 쓴다, RED 논리를 따진다, SILVER 전문성 기반 검증한다, BLUE 공감대를 형성한다, GOLD 독자 관점 평가한다." />
+      </div>
       <div class="cast__roles" aria-hidden="true">
         <span class="cast__role" style="left:17%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip black"></span>Black</span><span class="cast__role-desc">초안을 쓴다</span></span>
         <span class="cast__role" style="left:36%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip red"></span>Red</span><span class="cast__role-desc">논리를 따진다</span></span>
-        <span class="cast__role" style="left:49%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip silver"></span>Silver</span><span class="cast__role-desc">기준으로 잰다</span></span>
-        <span class="cast__role" style="left:69%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip blue"></span>Blue</span><span class="cast__role-desc">읽는 마음을 본다</span></span>
-        <span class="cast__role" style="left:84%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip gold"></span>Gold</span><span class="cast__role-desc">실제로 읽는다</span></span>
+        <span class="cast__role" style="left:52%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip silver"></span>Silver</span><span class="cast__role-desc">전문성 기반 검증한다</span></span>
+        <span class="cast__role" style="left:71.5%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip blue"></span>Blue</span><span class="cast__role-desc">공감대를 형성한다</span></span>
+        <span class="cast__role" style="left:87%"><span class="cast__tick"></span><span class="cast__role-head"><span class="cast__chip gold"></span>Gold</span><span class="cast__role-desc">독자 관점 평가한다</span></span>
       </div>
     </section>
+     </div>
+     <!-- 사진이 멈춰 있는 동안 아래 프롬프트 화면이 덮으며 올라올 자리 -->
+     <div class="cast-hold" aria-hidden="true"></div>
     </div>
 
     <button class="scrolldown" id="scrolldown" type="button" aria-label="아래로 스크롤">
@@ -1716,7 +1736,29 @@ body.is-loading .grid-section{animation-delay:.28s}
         </div>
       </div>
     </section>
+  </section>
 
+  <header class="topbar">
+  <div class="topbar__inner">
+    <a class="brand" href="#" id="brandHome" aria-label="홈으로">
+      <img class="brand__mark" src="assets/logo/logo1-transparent.png" alt="AI Roasting" />
+      <span class="brand__mobile">AI ROASTING</span>
+      <span class="brand__sep">&amp;</span>
+      <span class="brand__name" id="brandLabel">5-Color Harness</span>
+    </a>
+    <div class="topbar__actions">
+      <span id="themeToggle" hidden aria-hidden="true"></span>
+      <a class="icon-btn icon-btn--github" href="https://github.com/airoasting/5color" target="_blank" rel="noopener noreferrer" aria-label="GitHub 저장소 (새 탭)">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+      </a>
+      <button type="button" class="icon-btn icon-btn--menu" id="chipsToggle" aria-label="카테고리 메뉴" aria-expanded="false" aria-controls="chips">
+        <span class="hamburger" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+  <section class="list-view" id="listView">
     <div class="folio">
       <div class="folio__inner">
         <span class="folio__dots" aria-hidden="true"><span class="dot black"></span><span class="dot red"></span><span class="dot silver"></span><span class="dot blue"></span><span class="dot gold"></span></span>
@@ -2118,6 +2160,7 @@ ${leakBlock}══════════════════════�
 
 /* ============ ELEMENTS ============ */
 const listView = document.getElementById("listView");
+const introView = document.getElementById("intro");   // 사진·프롬프트 두 화면. 상세로 들어가면 list-view와 함께 접힌다.
 const detail = document.getElementById("detail");
 const grid = document.getElementById("grid");
 const chips = document.getElementById("chips");
@@ -2510,6 +2553,7 @@ function openDetail(id, opts){
   copyLabel.textContent = "복사";
 
   listView.classList.add("is-hidden");
+  if(introView) introView.classList.add("is-hidden");
   detail.classList.add("is-active");
   detail.setAttribute("aria-hidden","false");
   window.scrollTo({top:0,behavior:"instant"});
@@ -2545,6 +2589,7 @@ function backToList(opts){
   detail.classList.remove("is-active");
   detail.setAttribute("aria-hidden","true");
   listView.classList.remove("is-hidden");
+  if(introView) introView.classList.remove("is-hidden");
   setBrandLabel("5-Color Harness");
   currentDomainId = null;
   detailState = null;
@@ -2680,32 +2725,34 @@ window.addEventListener("load",()=>{
 });
 
 /* ============ 첫 화면 사진 ============ */
-/* 사진은 화면 가로를 꽉 채운다. 세로는 표제가 쓰는 높이만큼 내려 얼굴 위에 글자가 겹치지 않게 한다.
-   첫 화면 블록의 높이를 "표제 + 사진"으로 잡아 두므로, 처음에는 사진 아래쪽(다리·바닥)이 화면 밖으로
-   잘려 있다가 스크롤을 내리면 그대로 드러난다. 고정도 변형도 없고, 브라우저의 평범한 스크롤이 전부다.
-   사진 위에 남는 여백은 사진의 맨 윗줄을 그대로 늘려 깔아 이음선을 없앤다. */
+/* 사진은 화면 가로를 꽉 채우고, 사진 블록(100vh)의 바닥에 붙어 있다. 블록이 표제 아래에서 시작하므로
+   처음에는 사진의 위쪽만 보이고, 스크롤을 내리면 블록이 올라오며 잘려 있던 아래쪽이 드러난다.
+   블록 윗변이 화면 맨 위에 닿으면 sticky가 거기서 잡아 세운다. 여기까지 CSS가 다 하고,
+   JS가 하는 일은 사진 크기와 위치를 화면에 맞춰 넣는 것과, 사진 위 여백 색을 맞추는 것뿐이다. */
 (function(){
   const cast = document.querySelector(".cast");
   const band = document.querySelector(".cast__band");
   const img = document.querySelector(".cast__img");
-  const over = document.querySelector(".cast__over");
   const rolesWrap = document.querySelector(".cast__roles");
   if(!cast || !band || !img || !rolesWrap) return;
-  const AR = 1280 / 720;    // 사진 비율
+  const AR = 1280 / 720;      // 사진 비율
+  const narrow = window.matchMedia("(max-width:680px)");   // CSS의 모바일 분기와 같은 지점
 
   function layout(){
-    const vw = cast.clientWidth, vh = window.innerHeight;
-    if(!vw || !vh) return;
-    const reserve = over ? over.offsetHeight : 0;
+    const vw = cast.clientWidth;
+    if(!vw) return;
     const w = vw, h = w / AR;                       // 가로는 언제나 화면 전체
-    // 표제와 사진이 한 화면에 다 들어가면 그 화면 높이를 쓰고, 넘치면 넘치는 만큼 블록을 늘린다.
-    const castH = Math.max(vh, reserve + h);
-    const top   = castH - h;                        // 사진은 블록 바닥에 붙인다
-    cast.style.height = castH + "px";
+    if(narrow.matches){
+      // 모바일: 고정도 런웨이도 없다. 블록이 사진 높이만큼만 차지한다.
+      cast.style.height = Math.round(h) + "px";
+      img.style.top = "0px";
+    }else{
+      cast.style.height = "";                       // CSS의 100vh
+      img.style.top = (window.innerHeight - h) + "px";   // 블록 바닥에 붙인다
+    }
     img.style.width  = w + "px";
     img.style.height = h + "px";
     img.style.left   = "0px";
-    img.style.top    = top + "px";
     // 이름의 left:17% 같은 값이 인물 위치와 맞도록, 이름 묶음을 사진과 같은 가로 범위에 올린다
     rolesWrap.style.left  = "0px";
     rolesWrap.style.width = w + "px";
@@ -2724,11 +2771,19 @@ window.addEventListener("load",()=>{
       const cx = c.getContext("2d", {willReadFrequently:true});
       cx.drawImage(img, 0, 0, img.naturalWidth, 1, 0, 0, img.naturalWidth, 1);
       const d = cx.getImageData(0, 0, 1, 1).data;
-      band.style.backgroundColor    = "rgb(" + d[0] + "," + d[1] + "," + d[2] + ")";
-      band.style.backgroundImage    = "url(" + c.toDataURL("image/png") + ")";
+      const solid = "rgb(" + d[0] + "," + d[1] + "," + d[2] + ")";
+      const strip = "url(" + c.toDataURL("image/png") + ")";
+      band.style.backgroundColor    = solid;
+      band.style.backgroundImage    = strip;
       band.style.backgroundRepeat   = "no-repeat";
       band.style.backgroundSize     = "100% 100%";
       band.style.backgroundPosition = "0 0";
+      // 표제 블록이 깔고 앉을 배경도 같은 한 줄을 쓴다(핀의 ::before가 읽어간다)
+      const pin = document.querySelector(".cast-pin");
+      if(pin){
+        pin.style.setProperty("--cast-solid", solid);
+        pin.style.setProperty("--cast-strip", strip);
+      }
     }catch(e){}
   }
 
@@ -2739,24 +2794,6 @@ window.addEventListener("load",()=>{
   window.addEventListener("resize", layout, {passive:true});
   // 웹폰트가 늦게 오면 표제 높이가 달라진다. 다 실린 뒤 한 번 더 맞춘다.
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
-})();
-
-/* 상단 헤더: 첫 두 화면(사진 · 프롬프트)이 다 지나간 뒤에 나타난다. 두 화면 모두 어두운 배경 위의
-   연출이라 크림색 바가 얹히면 화면이 끊긴다. 기준선은 프롬프트 섹션의 아랫변이다.
-   (예전에는 사진 시퀀스가 끝나는 지점을 기준으로 삼았는데, 그 기준이 모바일에서는 영영 오지 않아
-   작은 화면에서 헤더가 통째로 나타나지 않았다. 그래서 실제 섹션 위치로 바꿨다.) */
-(function(){
-  const topbar = document.querySelector(".topbar");
-  const demo = document.getElementById("demo");
-  if(!topbar) return;
-  function update(){
-    if(!demo || !demo.offsetHeight){ topbar.classList.add("is-shown"); return; }
-    // 프롬프트 섹션이 화면 위로 완전히 빠진 뒤에 올린다. 어두운 화면 위에 크림색 바가 걸치는 순간이 없다.
-    topbar.classList.toggle("is-shown", demo.getBoundingClientRect().bottom <= 12);
-  }
-  update();
-  window.addEventListener("scroll", update, {passive:true});
-  window.addEventListener("resize", update, {passive:true});
 })();
 
 /* 첫 화면 아래로 스크롤 버튼: 프롬프트 섹션의 윗변까지 내려간다. */
