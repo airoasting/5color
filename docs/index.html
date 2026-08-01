@@ -2741,20 +2741,26 @@ window.addEventListener("load",()=>{
   function layout(){
     const vw = cast.clientWidth;
     if(!vw) return;
-    const w = vw, h = w / AR;                       // 가로는 언제나 화면 전체
+    let w = vw, h = w / AR;                         // 기본은 화면 가로를 꽉 채운다
     if(narrow.matches){
       // 모바일: 고정도 런웨이도 없다. 블록이 사진 높이만큼만 차지한다.
       cast.style.height = Math.round(h) + "px";
       img.style.top = "0px";
     }else{
       cast.style.height = "";                       // CSS의 100vh
-      img.style.top = (window.innerHeight - h) + "px";   // 블록 바닥에 붙인다
+      /* 사진은 한 군데도 잘리지 않는다. 창이 가로로 길어 사진이 블록(100vh)보다 높아지면
+         세로에 맞춰 줄이고 가운데 놓는다. 그때 좌우에 남는 자리는 사진 가장자리와 같은
+         비건디라 경계가 보이지 않는다. 잘라서 채우면 바깥 두 사람이 먼저 잘려나간다. */
+      const vh = window.innerHeight;
+      if(h > vh){ h = vh; w = h * AR; }
+      img.style.top = (vh - h) + "px";               // 블록 바닥에 붙인다
     }
+    const left = (vw - w) / 2;
     img.style.width  = w + "px";
     img.style.height = h + "px";
-    img.style.left   = "0px";
+    img.style.left   = left + "px";
     // 이름의 left:17% 같은 값이 인물 위치와 맞도록, 이름 묶음을 사진과 같은 가로 범위에 올린다
-    rolesWrap.style.left  = "0px";
+    rolesWrap.style.left  = left + "px";
     rolesWrap.style.width = w + "px";
   }
 
