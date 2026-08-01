@@ -387,8 +387,8 @@ em,.serif{
 }
 /* 로고는 배경이 비치는 PNG라 비건디 위에 놓으면 형태가 흐려진다. 흰 원을 깔아 도장처럼 세운다. */
 .cast__brand img{
-  width:34px;
-  height:34px;
+  width:27px;
+  height:27px;
   object-fit:contain;
   flex:none;
   border-radius:999px;
@@ -566,12 +566,35 @@ em,.serif{
 /* 사진 다음에 오는 두 번째 화면. 이 사이트가 파는 것이 무엇인지 말로 설명하는 대신
    프롬프트 열 줄을 그대로 보여준다. 검정 대신 비건디를 끝까지 어둡게 내린 색을 쓴다.
    순수 검정은 위(사진)·아래(크림) 어느 쪽과도 같은 팔레트로 읽히지 않는다. */
-.demo{
-  /* 고정된 첫 화면 위로 덮으며 올라온다. margin-top이 핀의 마지막 100vh만큼 이 섹션을 끌어올리고,
-     z-index가 사진보다 위에 놓는다. 한 화면을 온전히 덮어야 하므로 min-height도 화면 높이로 잡는다. */
+/* 두 번째 화면도 첫 화면과 같은 안무를 쓴다.
+     [프롬프트 블록] 100vh. sticky라 윗변이 화면 맨 위에 닿으면 거기서 멈춘다
+     [고정 구간]     100vh. 멈춰 있는 동안 아래 크림색 본문이 위를 덮으며 올라오는 자리
+   margin-top(-100vh)은 이 묶음을 첫 화면의 고정 구간만큼 끌어올린다. 그래서 사진의 고정이
+   풀리는 순간 = 프롬프트가 화면을 다 덮는 순간이 된다. 아래 .after-intro도 같은 방식이다. */
+.demo-pin{
   position:relative;
   z-index:5;
   margin-top:-100vh;
+}
+.demo-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:clip;
+}
+.demo-hold{height:100vh}
+/* 인트로 다음 묶음(헤더 + 본문). 멈춰 있는 프롬프트 화면 위로 덮으며 올라온다.
+   덮는 쪽이므로 배경이 반드시 불투명해야 한다. 비어 있으면 카드 사이로 아래 어두운 화면이 비친다. */
+.after-intro{
+  position:relative;
+  z-index:6;
+  margin-top:-100vh;
+  background:var(--cream);
+}
+/* 상세 화면으로 들어가면 인트로가 접힌다. 그때는 끌어올릴 것이 없다. */
+.intro.is-hidden ~ .after-intro{margin-top:0}
+.demo{
+  height:100%;
   min-height:100vh;
   display:flex;
   align-items:center;
@@ -706,8 +729,12 @@ em,.serif{
   .demo__code.is-done .demo__cursor{animation:none}
 }
 @media (max-width:680px){
-  /* 사진이 없으니 사진 위로 끌어올릴 것도, 한 화면을 덮을 이유도 없다 */
-  .demo{padding:64px 18px 68px;display:block;margin-top:0;min-height:0}
+  /* 모바일은 고정도 겹침도 쓰지 않는다. 위아래로 그냥 이어 붙인다. */
+  .demo{padding:64px 18px 68px;display:block;min-height:0;height:auto}
+  .demo-pin{margin-top:0}
+  .demo-sticky{position:static; height:auto; overflow:visible}
+  .demo-hold{display:none}
+  .after-intro{margin-top:0}
   .demo__code{line-height:1.95}
   .demo__bar-name{display:none}
 }
@@ -1710,6 +1737,8 @@ body.is-loading .grid-section{animation-delay:.28s}
       <span class="scrolldown__chevron"></span>
     </button>
 
+    <div class="demo-pin">
+     <div class="demo-sticky">
     <!-- 두 번째 화면: 프롬프트 실물. 위 사진의 다섯 인물이 실제로 어떻게 불려 나오는지를
          설명 대신 열 줄짜리 예시 하나로 보여준다. JS가 이 <pre>를 글자 단위로 다시 심어
          타이핑으로 재생하지만, 스크립트가 없어도 원문이 그대로 읽힌다. -->
@@ -1736,8 +1765,14 @@ body.is-loading .grid-section{animation-delay:.28s}
         </div>
       </div>
     </section>
+     </div>
+     <!-- 프롬프트가 멈춰 있는 동안 아래 크림색 본문이 덮으며 올라올 자리 -->
+     <div class="demo-hold" aria-hidden="true"></div>
+    </div>
   </section>
 
+  <!-- 인트로 다음. 멈춰 있는 프롬프트 화면 위로 덮으며 올라온다. -->
+  <div class="after-intro">
   <header class="topbar">
   <div class="topbar__inner">
     <a class="brand" href="#" id="brandHome" aria-label="홈으로">
@@ -1808,6 +1843,7 @@ body.is-loading .grid-section{animation-delay:.28s}
       <div class="grid" id="grid"></div>
     </section>
   </section>
+  </div>
 
   <!-- DETAIL VIEW -->
   <section class="detail" id="detail" aria-hidden="true">
