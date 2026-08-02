@@ -321,8 +321,10 @@ em,.serif{
   position:fixed;
   /* 바닥은 다섯 이름 캡션 행이 쓴다. 버튼을 같은 높이에 두면 화면이 좁아질 때 사진 잘림이 커져
      맨 오른쪽 이름과 부딪친다. 그래서 캡션 행 위쪽으로 올려 세로로 떼어 놓는다. */
-  right:clamp(20px, 3vw, 40px);
-  bottom:clamp(112px, 14vh, 150px);
+  left:50%;
+  right:auto;
+  bottom:clamp(24px, 3.5vh, 40px);
+  transform:translateX(-50%);
   width:46px;
   height:46px;
   border-radius:999px;
@@ -348,11 +350,11 @@ em,.serif{
   transform:rotate(45deg);
 }
 @keyframes scrolldownBounce{
-  0%,100%{ transform:translateY(0); }
-  50%{ transform:translateY(9px); }
+  0%,100%{ transform:translateX(-50%) translateY(0); }
+  50%{ transform:translateX(-50%) translateY(9px); }
 }
 @media (prefers-reduced-motion:reduce){
-  .scrolldown{animation:none; transform:none}
+  .scrolldown{animation:none; transform:translateX(-50%)}
 }
 .cast{
   position:relative;
@@ -430,16 +432,23 @@ em,.serif{
   letter-spacing:-0.01em;
   color:rgba(242,216,106,0.92);
 }
-/* 이름이 얹히는 하단에 어두운 그라데이션을 깐다. 흰 정장·베이지 정장 위에서도 크림색 글자가 읽히게 하는 장치.
-   밴드가 아니라 .cast에 두는 이유는, 밴드의 filter:brightness가 이 막까지 밝혀버리기 때문이다. */
-.cast::after{
+/* 이름 뒤에 깔리는 어두운 막. 흰 정장·베이지 정장 위에서도 크림색 글자가 읽히게 하는 장치다.
+   예전에는 블록 바닥에 붙여 두었는데, 사진이 표제 바로 아래로 올라오면서 블록 바닥과 사진 바닥이
+   더 이상 같은 자리가 아니게 됐다. 그래서 막을 이름줄 자체에 붙여 항상 이름을 따라다니게 한다. */
+.cast__roles::before{
   content:"";
   position:absolute;
-  left:0; right:0; bottom:0;
-  height:min(24vh, 190px);
-  background:linear-gradient(to top, rgba(40,6,15,0.86), rgba(40,6,15,0.55) 38%, rgba(40,6,15,0));
+  left:0; right:0;
+  top:-78px; bottom:-84px;
+  /* 위아래 양쪽으로 옅어진다. 아래를 딱 끊으면 막이 끝나는 자리에 또 다른 가로선이 생긴다. */
+  background:linear-gradient(to bottom,
+    rgba(40,6,15,0) 0%,
+    rgba(40,6,15,0.5) 34%,
+    rgba(40,6,15,0.88) 56%,
+    rgba(40,6,15,0.72) 78%,
+    rgba(40,6,15,0) 100%);
   pointer-events:none;
-  z-index:1;
+  z-index:-1;
 }
 .cast__eyebrow{
   max-width:1040px;
@@ -472,13 +481,10 @@ em,.serif{
 }
 .cast__img.is-on{opacity:1}
 .cast__roles{
-  /* 사진 위에 겹쳐 놓는다. left·width는 JS가 사진의 실제 가로 범위에 맞춰 넣으므로
-     자식의 left:17% 같은 값이 인물 위치와 계속 일치한다. */
+  /* 사진 아랫부분에 겹쳐 놓는 하나의 캡션 행. left·width·top 모두 JS가 사진의 실제 범위에 맞춰
+     넣으므로, 자식의 left:17% 같은 값이 인물 위치와 계속 일치하고 화면 크기가 바뀌어도 따라온다.
+     인물 중간 높이에 떠 있으면 어느 인물의 이름인지 읽히지 않으므로 발치에 붙인다. */
   position:absolute;
-  /* 다섯 이름을 화면 바닥에 붙인 하나의 캡션 행으로 둔다. 인물 중간 높이에 떠 있으면
-     어느 인물의 이름인지도, 무슨 성격의 줄인지도 읽히지 않는다. 바닥은 그라데이션이 가장
-     진한 자리라 판독도 같이 좋아진다. */
-  bottom:clamp(26px, 3.4vh, 40px);
   height:70px;
   margin:0;
   max-width:none;
@@ -1745,7 +1751,7 @@ body.is-loading .grid-section{animation-delay:.28s}
     <section class="demo" id="demo" aria-label="프롬프트 예시">
       <div class="demo__inner">
         <p class="demo__eyebrow">Example · 시 쓰기</p>
-        <h2 class="demo__title">지침란에 이 여섯 줄을 붙여넣으면,<br/><em>다섯 페르소나가 하나의 주제로 토론을 시작합니다.</em></h2>
+        <h2 class="demo__title">프롬프트에 이 여섯 줄을 붙여넣으면,<br/><em>다섯 페르소나가 하나의 주제로 토론을 시작합니다.</em></h2>
         <div class="demo__console">
           <div class="demo__bar">
             <span class="demo__bar-dots" aria-hidden="true"><i style="background:#111111;box-shadow:0 0 0 1.2px rgba(255,255,255,.55)"></i><i style="background:#D63A2F"></i><i style="background:#B5B3B0"></i><i style="background:#3866D6"></i><i style="background:#D7A839"></i></span>
@@ -1966,7 +1972,7 @@ body.is-loading .grid-section{animation-delay:.28s}
 <footer class="foot">
   <div class="foot__inner">
     <div class="foot__sig">
-      <span class="foot__big">5 COLOR HARNESS</span>
+      <span class="foot__big">5-COLOR HARNESS</span>
     </div>
     <div class="foot__bar">
       <span class="foot__pages">&copy; 2026 AI ROASTING. All rights reserved.</span>
@@ -2772,32 +2778,37 @@ window.addEventListener("load",()=>{
   const rolesWrap = document.querySelector(".cast__roles");
   if(!cast || !band || !img || !rolesWrap) return;
   const AR = 1280 / 720;      // 사진 비율
+  const ROLES_H = 70;         // 이름줄 높이(.cast__roles의 CSS 값과 같아야 한다)
   const narrow = window.matchMedia("(max-width:680px)");   // CSS의 모바일 분기와 같은 지점
 
   function layout(){
     const vw = cast.clientWidth;
     if(!vw) return;
+    const over = document.querySelector(".cast__over");
+    const reserve = over ? over.offsetHeight : 0;
     let w = vw, h = w / AR;                         // 기본은 화면 가로를 꽉 채운다
     if(narrow.matches){
       // 모바일: 고정도 런웨이도 없다. 블록이 사진 높이만큼만 차지한다.
       cast.style.height = Math.round(h) + "px";
-      img.style.top = "0px";
     }else{
       cast.style.height = "";                       // CSS의 100vh
-      /* 사진은 한 군데도 잘리지 않는다. 창이 가로로 길어 사진이 블록(100vh)보다 높아지면
-         세로에 맞춰 줄이고 가운데 놓는다. 그때 좌우에 남는 자리는 사진 가장자리와 같은
-         비건디라 경계가 보이지 않는다. 잘라서 채우면 바깥 두 사람이 먼저 잘려나간다. */
-      const vh = window.innerHeight;
-      if(h > vh){ h = vh; w = h * AR; }
-      img.style.top = (vh - h) + "px";               // 블록 바닥에 붙인다
+      /* 사진은 표제 바로 아래에 붙고, 표제와 사진과 다섯 이름이 첫 화면 안에 다 들어가야 한다.
+         그래서 남은 높이(화면 - 표제)를 넘으면 세로에 맞춰 줄이고 가운데 놓는다.
+         잘라서 채우면 바깥 두 사람이 먼저 잘려나가므로, 줄이는 쪽을 택한다.
+         좌우에 남는 자리는 사진 가장자리와 같은 비건디라 경계가 보이지 않는다. */
+      const maxH = Math.max(1, window.innerHeight - reserve);
+      if(h > maxH){ h = maxH; w = h * AR; }
     }
+    img.style.top = "0px";                           // 블록 맨 위 = 표제 바로 아래
     const left = (vw - w) / 2;
     img.style.width  = w + "px";
     img.style.height = h + "px";
     img.style.left   = left + "px";
-    // 이름의 left:17% 같은 값이 인물 위치와 맞도록, 이름 묶음을 사진과 같은 가로 범위에 올린다
+    /* 이름줄은 사진 발치에 붙인다. 사진이 블록 바닥에 닿지 않으므로 위치를 직접 계산해 넣는다.
+       left·width를 사진과 같게 맞춰야 자식의 left:17% 같은 값이 인물 위치와 일치한다. */
     rolesWrap.style.left  = left + "px";
     rolesWrap.style.width = w + "px";
+    rolesWrap.style.top   = Math.max(0, h - ROLES_H - Math.min(28, h * 0.035)) + "px";
   }
 
   /* 사진 위에 남는 여백을 채우는 방법.
@@ -2808,6 +2819,10 @@ window.addEventListener("load",()=>{
      걸리고, 이음선이 생길 여지가 없다. 캔버스가 막힌 환경에서만 아래 단색으로 물러선다. */
   function syncBandBg(){
     try{
+      /* 사진의 맨 윗줄 한 줄을 그대로 떠서 여백 전체에 늘려 깐다. 사진 배경은 네 가장자리가 모두
+         같은 비건디라 위아래 어디에 써도 맞는다. 아랫줄은 쓰지 않는다. 인물 다리가 걸려 있어
+         늘리면 세로 줄무늬가 생긴다. 사진 아랫변에서 다리가 잘리는 것은 원본 사진의 프레임이지
+         색이 어긋나는 것이 아니고, 그 자리는 이름줄 뒤 어두운 막이 덮는다. */
       const c = document.createElement("canvas");
       c.width = img.naturalWidth; c.height = 1;
       const cx = c.getContext("2d", {willReadFrequently:true});
@@ -2820,7 +2835,7 @@ window.addEventListener("load",()=>{
       band.style.backgroundRepeat   = "no-repeat";
       band.style.backgroundSize     = "100% 100%";
       band.style.backgroundPosition = "0 0";
-      // 표제 블록이 깔고 앉을 배경도 같은 한 줄을 쓴다(핀의 ::before가 읽어간다)
+      // 표제가 앉는 위쪽 여백도 같은 한 줄을 쓴다(핀의 ::before가 읽어간다)
       const pin = document.querySelector(".cast-pin");
       if(pin){
         pin.style.setProperty("--cast-solid", solid);
