@@ -903,9 +903,11 @@ em,.serif{
 /* ===== Chips ===== */
 .chips-wrap{
   /* 헤더도 sticky라 top:0으로 두면 헤더 밑에 깔려 가려진다. 헤더 높이만큼 내려 그 아래에 붙인다.
-     높이는 JS가 실제로 재서 --topbar-h에 넣는다(글꼴이 늦게 실리면 값이 달라지기 때문). */
+     높이는 JS가 실제로 재서 --topbar-h에 넣는다(글꼴이 늦게 실리면 값이 달라지기 때문).
+     1px을 빼서 살짝 겹친다. 딱 맞추면 소수점 높이(77.5px)와 화면 배율 탓에 둘 사이로 아래
+     내용이 비치는 실선이 생긴다. 헤더가 위에 있으므로(z-index 60 > 30) 겹친 1px은 가려진다. */
   position:sticky;
-  top:var(--topbar-h, 78px);
+  top:calc(var(--topbar-h, 78px) - 1px);
   z-index:30;
   background:var(--cream);
   border-bottom:1.5px solid var(--rule);
@@ -2877,7 +2879,8 @@ window.addEventListener("load",()=>{
   const topbar = document.querySelector(".topbar");
   if(!topbar) return;
   function sync(){
-    document.documentElement.style.setProperty("--topbar-h", Math.round(topbar.offsetHeight) + "px");
+    // offsetHeight는 정수로 반올림된다. 실제 높이가 77.5px이면 78px이 되어 0.5px 틈이 생긴다.
+    document.documentElement.style.setProperty("--topbar-h", topbar.getBoundingClientRect().height + "px");
   }
   sync();
   window.addEventListener("resize", sync, {passive:true});
