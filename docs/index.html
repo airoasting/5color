@@ -152,12 +152,16 @@ em,.serif{
 @keyframes brandSpin{
   to{transform:rotate(360deg)}
 }
-.brand:hover .brand__mark{
+.brand:hover .brand__mark,
+.cast__brand:hover img{
   animation:brandSpin 1s linear infinite;
 }
 .brand__name span,
 .brand__mobile span,
-.brand__sep{
+.brand__sep,
+.cast__brand-word span,
+.cast__brand-name span,
+.cast__brand-sep{
   display:inline-block;
   will-change:transform;
 }
@@ -168,14 +172,21 @@ em,.serif{
 }
 .brand:hover .brand__name span,
 .brand:hover .brand__mobile span,
-.brand:hover .brand__sep{
+.brand:hover .brand__sep,
+.cast__brand:hover .cast__brand-word span,
+.cast__brand:hover .cast__brand-name span,
+.cast__brand:hover .cast__brand-sep{
   animation:brandWave .9s ease-in-out infinite;
 }
 @media (prefers-reduced-motion:reduce){
   .brand:hover .brand__mark,
   .brand:hover .brand__name span,
   .brand:hover .brand__mobile span,
-  .brand:hover .brand__sep{animation:none}
+  .brand:hover .brand__sep,
+  .cast__brand:hover img,
+  .cast__brand:hover .cast__brand-word span,
+  .cast__brand:hover .cast__brand-name span,
+  .cast__brand:hover .cast__brand-sep{animation:none}
 }
 .brand__mobile{
   font-family:var(--display);
@@ -1708,7 +1719,7 @@ body.is-loading .grid-section{animation-delay:.28s}
           <img src="assets/logo/logo1-transparent.png" alt="" aria-hidden="true" />
           <span class="cast__brand-word">AI ROASTING</span>
           <span class="cast__brand-sep">&amp;</span>
-          <span>5-Color Harness</span>
+          <span class="cast__brand-name">5-Color Harness</span>
         </span>
         <h1 class="cast__title">하나의 프로젝트에,<br/><em>다섯 명의 전문가.</em></h1>
         <p class="cast__sub">한 명이 초안을 쓰고, 네 명이 검증합니다. 프로젝트 지침란에 한 번만 붙여넣으면 됩니다.</p>
@@ -2213,6 +2224,11 @@ setBrandLabel(brandLabel.textContent);
 
 const brandMobile = document.querySelector(".brand__mobile");
 if(brandMobile){ brandMobile.innerHTML = splitChars(brandMobile.textContent); }
+
+// 사진 위 브랜드 줄도 같은 물결을 쓴다. 글자마다 지연을 달리 주려면 한 글자씩 span으로 나눠야 한다.
+document.querySelectorAll(".cast__brand-word, .cast__brand-name").forEach(function(el){
+  el.innerHTML = splitChars(el.textContent);
+});
 
 const detailFolio = document.getElementById("detailFolio");
 const detailTitle = document.getElementById("detailTitle");
