@@ -115,11 +115,13 @@ em,.serif{
 }
 
 /* ===== Topbar ===== */
-/* 상단 헤더는 고정하지 않는다. 인트로(사진·프롬프트) 두 화면이 끝나는 자리에 놓여 있다가,
-   내용과 함께 위로 스크롤돼 올라간다. 화면에 붙어 따라다니지 않는다.
-   흐름에 놓기 위해 인트로를 list-view 밖으로 빼고 그 사이에 두었다(마크업 순서 참고). */
+/* 상단 헤더는 인트로(사진·프롬프트) 두 화면이 끝나는 자리에서 처음 나타난다. 그전까지는
+   화면 아래에 있어 보이지 않고, 어두운 두 화면 위에 크림색 바가 걸치는 순간도 없다.
+   한 번 올라온 뒤로는 sticky로 화면 맨 위에 붙어 따라온다. 감싸는 .after-intro가 본문 끝까지
+   이어지므로 인덱스에서도 상세 화면에서도 계속 붙어 있다. */
 .topbar{
-  position:relative;
+  position:sticky;
+  top:0;
   z-index:60;
   background:var(--cream);
   border-bottom:1.5px solid var(--rule);
@@ -389,10 +391,12 @@ em,.serif{
 }
 /* 로고는 배경이 비치는 PNG라 비건디 위에 놓으면 형태가 흐려진다. 흰 원을 깔아 도장처럼 세운다. */
 .cast__brand img{
-  width:27px;
-  height:27px;
+  width:22px;
+  height:22px;
   object-fit:contain;
   flex:none;
+  /* 아래 표제 글자의 왼쪽 끝과 눈으로 맞춘다. 둥근 형태라 같은 x에 두면 안쪽으로 들어가 보인다. */
+  margin-left:2px;
   border-radius:999px;
   background:#FFFFFF;
   padding:1px;   /* 로고 바깥으로 흰색이 1px만 비친다 */
@@ -432,24 +436,8 @@ em,.serif{
   letter-spacing:-0.01em;
   color:rgba(242,216,106,0.92);
 }
-/* 이름 뒤에 깔리는 어두운 막. 흰 정장·베이지 정장 위에서도 크림색 글자가 읽히게 하는 장치다.
-   예전에는 블록 바닥에 붙여 두었는데, 사진이 표제 바로 아래로 올라오면서 블록 바닥과 사진 바닥이
-   더 이상 같은 자리가 아니게 됐다. 그래서 막을 이름줄 자체에 붙여 항상 이름을 따라다니게 한다. */
-.cast__roles::before{
-  content:"";
-  position:absolute;
-  left:0; right:0;
-  top:-78px; bottom:-84px;
-  /* 위아래 양쪽으로 옅어진다. 아래를 딱 끊으면 막이 끝나는 자리에 또 다른 가로선이 생긴다. */
-  background:linear-gradient(to bottom,
-    rgba(40,6,15,0) 0%,
-    rgba(40,6,15,0.5) 34%,
-    rgba(40,6,15,0.88) 56%,
-    rgba(40,6,15,0.72) 78%,
-    rgba(40,6,15,0) 100%);
-  pointer-events:none;
-  z-index:-1;
-}
+/* 이름 뒤에 어두운 막을 깔지 않는다. 사진 위에 가로로 긴 그림자 띠가 생겨 사진이 잘려 보인다.
+   판독은 글자 자체의 그림자로 해결한다(.cast__role-head / .cast__role-desc). */
 .cast__eyebrow{
   max-width:1040px;
   margin:0 auto clamp(16px,2.2vw,24px);
@@ -519,15 +507,15 @@ em,.serif{
   letter-spacing:0.1em;
   text-transform:uppercase;
   color:var(--cream);                 /* 사진(비건디) 위에 얹히므로 크림 */
-  text-shadow:0 1px 6px rgba(0,0,0,0.35);
+  text-shadow:0 1px 4px rgba(20,3,8,0.45);
 }
 .cast__role-desc{
   font-family:var(--sans);
   font-size:12.5px;
   color:var(--cream);
-  opacity:0.82;
+  opacity:0.88;
   white-space:nowrap;
-  text-shadow:0 1px 6px rgba(0,0,0,0.35);
+  text-shadow:0 1px 4px rgba(20,3,8,0.45);
 }
 .cast__chip{
   width:9px;
@@ -901,8 +889,10 @@ em,.serif{
 
 /* ===== Chips ===== */
 .chips-wrap{
+  /* 헤더도 sticky라 top:0으로 두면 헤더 밑에 깔려 가려진다. 헤더 높이만큼 내려 그 아래에 붙인다.
+     높이는 JS가 실제로 재서 --topbar-h에 넣는다(글꼴이 늦게 실리면 값이 달라지기 때문). */
   position:sticky;
-  top:0;
+  top:var(--topbar-h, 78px);
   z-index:30;
   background:var(--cream);
   border-bottom:1.5px solid var(--rule);
@@ -1849,7 +1839,6 @@ body.is-loading .grid-section{animation-delay:.28s}
       <div class="grid" id="grid"></div>
     </section>
   </section>
-  </div>
 
   <!-- DETAIL VIEW -->
   <section class="detail" id="detail" aria-hidden="true">
@@ -1967,6 +1956,7 @@ body.is-loading .grid-section{animation-delay:.28s}
       </article>
     </div>
   </section>
+  </div>
 </main>
 
 <footer class="foot">
@@ -2336,6 +2326,7 @@ function buildChips(){
       setChipsOpen(false);
       renderActiveCat();
       renderGrid();
+      scrollToGrid();   // 고른 카테고리의 첫 카드가 바로 보이는 자리로 옮긴다
     });
   });
   renderActiveCat();
@@ -2648,12 +2639,21 @@ function backToList(opts){
   }
 }
 
+/* 카테고리를 고르면 카드 묶음의 윗변이 보이는 영역 맨 위에 오도록 옮긴다.
+   화면 맨 위가 아니라 "가려지지 않는 맨 위"다. 헤더와 칩 줄과 (모바일에서는) 검색바가
+   화면에 붙어 있으므로, 그 높이를 모두 빼야 첫 카드가 그 아래에 걸리지 않는다.
+   위치는 칩 줄이 아니라 카드 묶음에서 잰다. 칩 줄은 붙어 있는 동안 제자리를 떠나 있기 때문이다. */
 function scrollToGrid(){
-  const chipsWrap = document.querySelector(".chips-wrap");
-  if(!chipsWrap){ window.scrollTo({top:0,behavior:"instant"}); return; }
-  const topbar = document.querySelector(".topbar");
-  const fixedOffset = (topbar && getComputedStyle(topbar).position === "fixed") ? topbar.offsetHeight : 0;
-  const y = chipsWrap.getBoundingClientRect().top + window.scrollY - fixedOffset;
+  const grid = document.querySelector(".grid-section");
+  if(!grid){ window.scrollTo({top:0,behavior:"instant"}); return; }
+  let stack = 0;
+  [".topbar", ".search-form", ".chips-wrap"].forEach(function(sel){
+    const el = document.querySelector(sel);
+    if(!el || !el.offsetHeight) return;
+    const pos = getComputedStyle(el).position;
+    if(pos === "fixed" || pos === "sticky") stack += el.offsetHeight;
+  });
+  const y = grid.getBoundingClientRect().top + window.scrollY - stack - 12;
   window.scrollTo({top:Math.max(0, y), behavior:"instant"});
 }
 
@@ -2784,19 +2784,17 @@ window.addEventListener("load",()=>{
   function layout(){
     const vw = cast.clientWidth;
     if(!vw) return;
-    const over = document.querySelector(".cast__over");
-    const reserve = over ? over.offsetHeight : 0;
     let w = vw, h = w / AR;                         // 기본은 화면 가로를 꽉 채운다
     if(narrow.matches){
       // 모바일: 고정도 런웨이도 없다. 블록이 사진 높이만큼만 차지한다.
       cast.style.height = Math.round(h) + "px";
     }else{
       cast.style.height = "";                       // CSS의 100vh
-      /* 사진은 표제 바로 아래에 붙고, 표제와 사진과 다섯 이름이 첫 화면 안에 다 들어가야 한다.
-         그래서 남은 높이(화면 - 표제)를 넘으면 세로에 맞춰 줄이고 가운데 놓는다.
-         잘라서 채우면 바깥 두 사람이 먼저 잘려나가므로, 줄이는 쪽을 택한다.
+      /* 가로는 언제나 화면을 꽉 채운다. 첫 화면에 맞추려고 임의로 줄이지 않는다.
+         줄이는 경우는 딱 하나, 사진이 블록(100vh)보다 높아져 잘려나갈 때뿐이다. 이때만
+         세로에 맞춰 줄이고 가운데 놓는다. 잘라서 채우면 바깥 두 사람이 먼저 잘려나간다.
          좌우에 남는 자리는 사진 가장자리와 같은 비건디라 경계가 보이지 않는다. */
-      const maxH = Math.max(1, window.innerHeight - reserve);
+      const maxH = window.innerHeight;
       if(h > maxH){ h = maxH; w = h * AR; }
     }
     img.style.top = "0px";                           // 블록 맨 위 = 표제 바로 아래
@@ -2804,11 +2802,13 @@ window.addEventListener("load",()=>{
     img.style.width  = w + "px";
     img.style.height = h + "px";
     img.style.left   = left + "px";
-    /* 이름줄은 사진 발치에 붙인다. 사진이 블록 바닥에 닿지 않으므로 위치를 직접 계산해 넣는다.
+    /* 이름줄은 사진 바로 아래 비건디 위에 놓는다. 사진 위에 얹으면 실버(밝은 회색 정장)와
+       골드(베이지 정장) 위에서 크림색 글자가 읽히지 않는다. 예전에는 그 아래 어두운 막을 깔아
+       해결했는데, 사진을 가로지르는 그림자 띠가 생겨 사진이 잘려 보였다.
        left·width를 사진과 같게 맞춰야 자식의 left:17% 같은 값이 인물 위치와 일치한다. */
     rolesWrap.style.left  = left + "px";
     rolesWrap.style.width = w + "px";
-    rolesWrap.style.top   = Math.max(0, h - ROLES_H - Math.min(28, h * 0.035)) + "px";
+    rolesWrap.style.top   = Math.round(h + Math.min(18, h * 0.03)) + "px";
   }
 
   /* 사진 위에 남는 여백을 채우는 방법.
@@ -2851,6 +2851,19 @@ window.addEventListener("load",()=>{
   window.addEventListener("resize", layout, {passive:true});
   // 웹폰트가 늦게 오면 표제 높이가 달라진다. 다 실린 뒤 한 번 더 맞춘다.
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+})();
+
+/* 헤더 높이를 재서 --topbar-h에 넣는다. 그 아래에 붙어야 하는 칩 줄이 이 값을 쓴다.
+   숫자를 CSS에 박아두면 글꼴이나 여백을 손볼 때마다 조용히 어긋난다. */
+(function(){
+  const topbar = document.querySelector(".topbar");
+  if(!topbar) return;
+  function sync(){
+    document.documentElement.style.setProperty("--topbar-h", Math.round(topbar.offsetHeight) + "px");
+  }
+  sync();
+  window.addEventListener("resize", sync, {passive:true});
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
 })();
 
 /* 첫 화면 아래로 스크롤 버튼: 프롬프트 섹션의 윗변까지 내려간다. */
