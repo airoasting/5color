@@ -382,6 +382,8 @@ em,.serif{
   display:inline-flex;
   align-items:center;
   gap:11px;
+  /* 브랜드 줄과 표제 사이만 더 벌린다. .cast__over의 gap을 키우면 표제와 설명 사이도 같이 벌어진다. */
+  margin-bottom:clamp(8px, 1.4vh, 18px);
   color:var(--cream);
   font-family:var(--mono);
   font-size:12.5px;
@@ -396,7 +398,7 @@ em,.serif{
   object-fit:contain;
   flex:none;
   /* 아래 표제 글자의 왼쪽 끝과 눈으로 맞춘다. 둥근 형태라 같은 x에 두면 안쪽으로 들어가 보인다. */
-  margin-left:2px;
+  margin-left:4px;
   border-radius:999px;
   background:#FFFFFF;
   padding:1px;   /* 로고 바깥으로 흰색이 1px만 비친다 */
