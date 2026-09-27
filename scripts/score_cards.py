@@ -101,8 +101,8 @@ ITEM_MARK = re.compile(r"^\s*(?:[-*]\s+|\d+\.\s+)")
 
 
 def specific_prohibitions(full_prompt):
-    # 2026-09 개편 뒤 금지는 마지막 절 "## 가드레일"에 산다. 옛 절 이름도 읽는다.
-    m = re.search(r"## (?:가드레일|하지 말아야 할 것)[^\n]*\n(.*?)(\n## |$)", full_prompt, re.S)
+    # 2026-09 개편 뒤 금지는 마지막 절 "## Guardrails"에 산다. 옛 절 이름도 읽는다.
+    m = re.search(r"## (?:Guardrails|가드레일|하지 말아야 할 것)[^\n]*\n(.*?)(\n## |$)", full_prompt, re.S)
     body = m.group(1) if m else ""
     sm = re.search(r"[^\n]*특화[^\n]*\n(.*?)(\n\n[^-\d\n]|$)", body, re.S)
     src = sm.group(1) if sm else body

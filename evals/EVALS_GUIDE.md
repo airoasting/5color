@@ -100,7 +100,7 @@ skill-creator의 `run_eval.py`는 자동 grader 기반인데, 우리 스킬은 �
 ### 점검 체크리스트 (각 출력별)
 
 - [ ] 출력이 **마크다운 한 묶음**이고 끝줄에 "위 마크다운을 새 클로드 프로젝트의 지침 박스에 붙여 넣어 사용하세요"가 있다.
-- [ ] 여섯 절(Role, Rubric, Workflow, Context, Tools, 가드레일)이 이 순서로 있고, 점수 눈금이 표로 적혀 있다.
+- [ ] 여섯 절(Role, Rubric, Workflow, Tools, Context, Guardrails)이 이 순서로 있고, 점수 눈금이 표로 적혀 있다.
 - [ ] Role의 BLACK 줄에 연차(15년차+), 톤, 제약이 모두 있다.
 - [ ] RED 이성·SILVER 분야 전문가·BLUE 공감 정체성 안에 머묾(RED가 분야 디테일·감정으로 흐르거나 BLUE가 논리 분석으로 흐르면 무효).
 - [ ] Context의 문체 목록에 종결 체와 분량이 명시됐다(가이드 표대로 작업 영역에 맞는 한 가지).
