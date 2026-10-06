@@ -53,8 +53,7 @@ EDITORIAL_PICKS = {
 }
 
 # 카드 id -> (F 빈도, S 스테이크, O 본인성, D AI델타, W 시연력)
-# 각 축 0~2점. 2026-10-06 작성자 기준으로 진열대 카드를 다시 채점했다.
-# 전문 직군 서랍 카드는 픽 후보가 아니라 7월 점수를 그대로 둔다.
+# 각 축 0~2점. 2026-10-06 작성자 기준으로 다시 채점했다.
 SCORES = {
     # 보고·기획
     "p1":  (2.0, 1.3, 1.7, 2.0, 1.8),  # 리서치·자료조사
@@ -80,24 +79,12 @@ SCORES = {
     "p16": (1.4, 1.6, 1.7, 1.5, 1.4),  # 영업·제휴 제안서
     "p12": (1.6, 1.7, 1.8, 1.9, 1.8),  # 협상 전략 브리프
     "p14": (1.4, 1.8, 1.5, 1.8, 1.6),  # 계약서 검토 (1차 검토)
-    # 마케팅·홍보
-    "p19": (1.0, 1.0, 1.0, 1.3, 1.3),  # 카피라이팅·출시 메시지
-    "p29": (1.2, 1.1, 0.9, 1.4, 1.2),  # 보도자료
     # 글쓰기·브랜딩
     "p33": (1.9, 0.9, 1.6, 1.9, 1.9),  # AI 글 자연스럽게 다듬기
     "p30": (1.4, 0.9, 1.7, 1.2, 1.2),  # SNS·링크드인 포스팅
     "p32": (0.9, 1.0, 1.3, 1.3, 1.2),  # 뉴스레터
     "p34": (0.2, 0.4, 1.5, 1.4, 1.0),  # 소설 쓰기
     "p35": (0.2, 0.3, 1.5, 1.4, 0.9),  # 시 쓰기
-    # 전문 직군 (서랍, 픽 후보 아님)
-    "p7":  (1.3, 1.9, 1.6, 1.6, 1.3),  # IR·실적 발표
-    "p8":  (0.9, 1.7, 1.9, 1.6, 1.5),  # 주주 서한
-    "p10": (1.2, 1.8, 1.0, 1.7, 1.5),  # 재무 모델링
-    "p11": (0.5, 2.0, 1.6, 1.8, 1.6),  # M&A 딜 메모
-    "p13": (0.9, 1.9, 1.5, 1.6, 1.3),  # 투자 검토
-    "p26": (0.5, 1.5, 1.7, 1.5, 1.4),  # 비전·미션 선언문
-    "p27": (0.6, 2.0, 1.9, 1.9, 1.8),  # 위기 대응 메시지
-    "p31": (0.6, 1.2, 1.8, 1.5, 1.3),  # 신문 칼럼
 }
 
 
@@ -114,10 +101,6 @@ def strip_html(s):
 
 # 카드 id -> order. main()이 docs/index.html에서 채운다.
 ORDER = {}
-
-# 진열대 밖 서랍. 쓰는 사람이 직군 몇 명뿐인 카드라 픽 후보에서 뺀다.
-DRAWER_CAT = "전문 직군"
-
 
 def card_number(cid):
     """카드에 찍히는 번호. docs/index.html이 order + 1을 두 자리로 찍는다.
@@ -162,8 +145,7 @@ def main():
         sys.exit(f"카드에 없는 점수가 있다. SCORES에서 지워라: {sorted(stale)}")
 
     ORDER.update({k: v["order"] for k, v in prompts.items()})
-    shelf = {k: v for k, v in SCORES.items() if prompts[k]["cat"] != DRAWER_CAT}
-    picks, passed, by_gate = select(shelf)
+    picks, passed, by_gate = select(SCORES)
     title = lambda cid: strip_html(prompts[cid]["title"])
     gate_ids = {c for _, _, c in by_gate}
 
@@ -195,7 +177,7 @@ def main():
             print(f"     [{prompts[cid]['folio']:6s}] {title(cid):22s} 총점 {tot:.1f}  <- {', '.join(why)}")
 
     covered = {prompts[cid]["cat"] for _, _, cid in picks}
-    all_cats = {v["cat"] for v in prompts.values() if v["cat"] != DRAWER_CAT}
+    all_cats = {v["cat"] for v in prompts.values()}
     print(f"\n카테고리 커버: {len(covered)}/{len(all_cats)}")
     for c in sorted(all_cats - covered):
         print(f"     픽 없음: {c}")
